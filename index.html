@@ -188,6 +188,38 @@
     background: rgba(200,200,255,0.1); border: 1px solid rgba(200,200,255,0.25);
     color: #c0b8f0; border-radius: 14px; padding: 3px 12px;
   }
+
+  /* ─── 月の流れ 入力エリア ─── */
+  .mf-input-section {
+    max-width: 580px; margin: 28px auto;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(240,208,128,0.2);
+    border-radius: 16px; padding: 22px 20px;
+    box-sizing: border-box;
+  }
+  .mf-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .mf-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .mf-field label { font-size: 0.8em; color: #a090c0; letter-spacing: 0.05em; }
+  .mf-field input[type="date"],
+  .mf-field input[type="time"] {
+    width: 100%; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(240,208,128,0.3); border-radius: 8px;
+    padding: 10px 12px; color: #e8e0f0; font-size: 1em;
+    outline: none; transition: border-color 0.2s; color-scheme: dark;
+    box-sizing: border-box;
+  }
+  .mf-field input[type="date"]:focus,
+  .mf-field input[type="time"]:focus { border-color: #f0d080; }
+  .mf-field-time { width: 120px; }
+  .mf-bottom-row {
+    display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap;
+  }
+  .mf-bottom-row .calc-btn { flex-shrink: 0; }
   .moon-empty { text-align: center; color: #6050a0; padding: 50px; font-size: 1.1em; }
 
 </style>
@@ -241,38 +273,34 @@
 </div><!-- /tab-planets -->
 
 <div class="tab-panel" id="tab-moonflow">
-  <div class="input-section" style="max-width:600px;margin:30px auto;">
-    <div style="display:flex;flex-direction:column;gap:16px;">
-      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;">
-        <div class="input-group">
-          <label>開始日</label>
-          <input type="date" id="mfStartDate">
-        </div>
-        <div class="input-group" style="min-width:110px;max-width:130px;">
-          <label>開始時刻</label>
-          <input type="time" id="mfStartTime" value="00:00">
+  <div class="mf-input-section">
+    <div class="mf-grid">
+      <div class="mf-field">
+        <label>開始日</label>
+        <input type="date" id="mfStartDate">
+      </div>
+      <div class="mf-field mf-field-time">
+        <label>開始時刻</label>
+        <input type="time" id="mfStartTime" value="00:00">
+      </div>
+      <div class="mf-field">
+        <label>終了日</label>
+        <input type="date" id="mfEndDate">
+      </div>
+      <div class="mf-field mf-field-time">
+        <label>終了時刻</label>
+        <input type="time" id="mfEndTime" value="23:59">
+      </div>
+    </div>
+    <div class="mf-bottom-row">
+      <div>
+        <label style="margin-bottom:6px;display:block;">時間帯</label>
+        <div class="tz-toggle">
+          <button class="tz-btn active" id="mfBtnJST" data-tz="9">JST +9</button>
+          <button class="tz-btn" id="mfBtnUTC" data-tz="0">UTC</button>
         </div>
       </div>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;">
-        <div class="input-group">
-          <label>終了日</label>
-          <input type="date" id="mfEndDate">
-        </div>
-        <div class="input-group" style="min-width:110px;max-width:130px;">
-          <label>終了時刻</label>
-          <input type="time" id="mfEndTime" value="23:59">
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-        <div>
-          <label style="margin-bottom:6px;display:block;">時間帯</label>
-          <div class="tz-toggle">
-            <button class="tz-btn active" id="mfBtnJST" data-tz="9">JST +9</button>
-            <button class="tz-btn" id="mfBtnUTC" data-tz="0">UTC</button>
-          </div>
-        </div>
-        <button class="calc-btn" id="mfCalcBtn" style="margin-top:20px;">流れを読む</button>
-      </div>
+      <button class="calc-btn" id="mfCalcBtn">流れを読む</button>
     </div>
     <div class="note" style="margin-top:14px;">※ 月はおよそ27.3日で12星座を一周します。数日〜数週間の範囲が見やすいです</div>
   </div>
