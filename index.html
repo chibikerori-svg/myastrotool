@@ -33,8 +33,21 @@
     border: 1px solid rgba(240,208,128,0.2);
     border-radius: 16px; padding: 24px;
   }
-  .input-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
-  .input-group { flex: 1; min-width: 140px; }
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto auto;
+    gap: 12px;
+    align-items: flex-end;
+  }
+  .input-group { min-width: 0; }
+  @media (max-width: 640px) {
+    .input-row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .input-row .calc-btn {
+      grid-column: 1 / -1;
+    }
+  }
   label { display: block; font-size: 0.8em; color: #a090c0; margin-bottom: 6px; letter-spacing: 0.05em; }
   input[type="date"], input[type="time"] {
     width: 100%; background: rgba(255,255,255,0.08);
@@ -130,8 +143,15 @@
   .pluto .planet-icon { color: #d080c0; }
   @media (max-width: 580px) {
     .sabian-preview { display: none; }
-    .input-row { flex-direction: column; }
     .header h1 { font-size: 1.5em; }
+  }
+  @media (max-width: 700px) {
+    .input-row {
+      grid-template-columns: 1fr 1fr;
+    }
+    .input-row .calc-btn {
+      grid-column: 1 / -1;
+    }
   }
 
   /* ─── タブナビゲーション ─── */
@@ -199,9 +219,13 @@
   }
   .mf-grid {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 120px;
     gap: 12px 14px;
     margin-bottom: 16px;
+  }
+  @media (max-width: 480px) {
+    .mf-grid { grid-template-columns: 1fr; }
+    .mf-field-time { width: 100%; }
   }
   .mf-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .mf-field label { font-size: 0.8em; color: #a090c0; letter-spacing: 0.05em; }
