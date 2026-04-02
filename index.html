@@ -262,11 +262,11 @@
   <div class="input-row">
     <div class="input-group">
       <label>日付</label>
-      <input type="date" id="dateInput">
+      <input type="text" id="dateInput" inputmode="numeric" placeholder="YYYY-MM-DD" maxlength="10">
     </div>
     <div class="input-group">
       <label id="timeLbl">時刻（JST / 日本時間）</label>
-      <input type="time" id="timeInput" value="12:00">
+      <input type="text" id="timeInput" inputmode="numeric" placeholder="12:00" maxlength="5" value="12:00">
     </div>
   </div>
   <div class="input-row-bottom">
@@ -302,19 +302,19 @@
     <div class="mf-grid">
       <div class="mf-field">
         <label>開始日</label>
-        <input type="date" id="mfStartDate">
+        <input type="text" id="mfStartDate" inputmode="numeric" placeholder="YYYY-MM-DD" maxlength="10">
       </div>
       <div class="mf-field mf-field-time">
         <label>開始時刻</label>
-        <input type="time" id="mfStartTime" value="00:00">
+        <input type="text" id="mfStartTime" inputmode="numeric" placeholder="00:00" maxlength="5" value="00:00">
       </div>
       <div class="mf-field">
         <label>終了日</label>
-        <input type="date" id="mfEndDate">
+        <input type="text" id="mfEndDate" inputmode="numeric" placeholder="YYYY-MM-DD" maxlength="10">
       </div>
       <div class="mf-field mf-field-time">
         <label>終了時刻</label>
-        <input type="time" id="mfEndTime" value="23:59">
+        <input type="text" id="mfEndTime" inputmode="numeric" placeholder="23:59" maxlength="5" value="23:59">
       </div>
     </div>
     <div class="mf-bottom-row">
