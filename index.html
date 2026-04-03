@@ -122,8 +122,9 @@
   .meta-ruler { color:#f0d080; border-color:rgba(240,208,128,0.35); background:rgba(240,208,128,0.08); }
   .meta-dignity-d  { color:#60e090; border-color:rgba(96,224,144,0.5);   background:rgba(96,224,144,0.1); }
   .meta-dignity-e  { color:#ffd700; border-color:rgba(255,215,0,0.5);   background:rgba(255,215,0,0.12); }
-  .meta-dignity-dt { color:#a0a0b0; border-color:rgba(160,160,176,0.45); background:rgba(160,160,176,0.08); }
-  .meta-dignity-f  { color:#70b0e8; border-color:rgba(112,176,232,0.5);  background:rgba(112,176,232,0.1); }
+  .meta-dignity-dt   { color:#a0a0b0; border-color:rgba(160,160,176,0.45); background:rgba(160,160,176,0.08); }
+  .meta-dignity-f    { color:#70b0e8; border-color:rgba(112,176,232,0.5);  background:rgba(112,176,232,0.1); }
+  .meta-dignity-face { color:#c890f8; border-color:rgba(200,144,248,0.5);  background:rgba(200,144,248,0.1); }
   .decan-box { margin-bottom:13px; padding:10px 14px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:10px; }
   .decan-box-title { font-size:0.75em; color:#7060a0; letter-spacing:0.06em; margin-bottom:7px; }
   .decan-row { display:flex; gap:18px; flex-wrap:wrap; }
@@ -442,20 +443,20 @@ const ELEM_JA =['🔥 火','🌿 地','💨 風','💧 水'];
 const MODAL_JA=['活動宮','固定宮','柔軟宮'];
 // 支配星（伝統＋近代）
 const RULERS=['火星','金星','水星','月','太陽','水星','金星','冥王星・火星','木星','土星','天王星・土星','海王星・木星'];
-// デカン支配星（トリプリシティ方式）
+// デカン支配星（カルデア式：土→木→火→太陽→金→水→月 の順で牡羊・火星から36デカン）
 const DECAN_RULERS=[
-  ['火星','太陽','木星'],     // 牡羊 (fire)
-  ['金星','水星','土星'],     // 牡牛 (earth)
-  ['水星','金星','天王星'],   // 双子 (air)
-  ['月','冥王星','海王星'],   // 蟹   (water)
-  ['太陽','木星','火星'],     // 獅子 (fire)
-  ['水星','土星','金星'],     // 乙女 (earth)
-  ['金星','天王星','水星'],   // 天秤 (air)
-  ['冥王星','海王星','月'],   // 蠍   (water)
-  ['木星','火星','太陽'],     // 射手 (fire)
-  ['土星','金星','水星'],     // 山羊 (earth)
-  ['天王星','水星','金星'],   // 水瓶 (air)
-  ['海王星','月','冥王星'],   // 魚   (water)
+  ['火星','太陽','金星'],     // 牡羊
+  ['水星','月','土星'],       // 牡牛
+  ['木星','火星','太陽'],     // 双子
+  ['金星','水星','月'],       // 蟹
+  ['土星','木星','火星'],     // 獅子
+  ['太陽','金星','水星'],     // 乙女
+  ['月','土星','木星'],       // 天秤
+  ['火星','太陽','金星'],     // 蠍
+  ['水星','月','土星'],       // 射手
+  ['木星','火星','太陽'],     // 山羊
+  ['金星','水星','月'],       // 水瓶
+  ['土星','木星','火星'],     // 魚
 ];
 // タロット大アルカナ（星座対応）
 const MAJOR_ARCANA=[
@@ -626,6 +627,7 @@ function calculate(){
           const dg=getDignity(pl.id, s.si);
           const di3=Math.floor(s.deg/10);
           const decanRuler=DECAN_RULERS[s.si][di3];
+          const faceDg=(pl.name===decanRuler);
           const suit=TAROT_SUIT[s.si%4];
           const minorNum=TAROT_BASE[s.si%3]+di3;
           const major=MAJOR_ARCANA[s.si];
@@ -636,6 +638,7 @@ function calculate(){
             <span class="meta-badge meta-modal">${s.modalJa}</span>
             <span class="meta-badge meta-ruler">支配星：${s.ruler}</span>
             ${dg?`<span class="meta-badge ${dg.cls}">${dg.label}</span>`:''}
+            ${faceDg?`<span class="meta-badge meta-dignity-face">フェイス（顔）</span>`:''}
           </div>
           <div class="decan-box">
             <div class="decan-box-title">◈ デカン ／ タロット</div>
