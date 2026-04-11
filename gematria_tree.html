@@ -193,6 +193,7 @@
 
     .lc-en { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1px; }
     .lc-he { font-family: 'Noto Serif Hebrew', serif; font-size: 1.6rem; color: var(--gold-light); line-height: 1; }
+    .lc-read { font-size: 0.72rem; color: var(--gold-dim); letter-spacing: 0.5px; }
     .lc-val { font-size: 0.8rem; color: var(--purple-light); font-weight: 500; }
     .lc-path { font-size: 0.68rem; color: var(--text-dim); }
 
@@ -565,28 +566,28 @@ const SEPHIROT = [
 
 // 22パス：{ path番号, 文字, 接続セフィラ2つ, タロット, 意味 }
 const PATHS = [
-  { n: 11, char: 'א', val: 1,   from: 1, to: 2,  tarot: '愚者',      meaning: '純粋な始まり・霊の息吹' },
-  { n: 12, char: 'ב', val: 2,   from: 1, to: 3,  tarot: '魔術師',    meaning: '意志と言葉の創造力' },
-  { n: 13, char: 'ג', val: 3,   from: 1, to: 6,  tarot: '女教皇',    meaning: '直観・魂の旅路' },
-  { n: 14, char: 'ד', val: 4,   from: 2, to: 3,  tarot: '女帝',      meaning: '愛と美の門・受容と育み' },
-  { n: 15, char: 'ה', val: 5,   from: 2, to: 6,  tarot: '皇帝',      meaning: '始まりと開口・新しい周期' },
-  { n: 16, char: 'ו', val: 6,   from: 2, to: 4,  tarot: '教皇',      meaning: '上と下を繋ぐ釘' },
-  { n: 17, char: 'ז', val: 7,   from: 3, to: 6,  tarot: '恋人',      meaning: '選択と識別・二項の統合' },
-  { n: 18, char: 'ח', val: 8,   from: 3, to: 5,  tarot: '戦車',      meaning: '意志による制御・霊的勝利' },
-  { n: 19, char: 'ט', val: 9,   from: 4, to: 5,  tarot: '力',        meaning: '内なる野性を愛で馴らす' },
-  { n: 20, char: 'י', val: 10,  from: 4, to: 6,  tarot: '隠者',      meaning: '孤独な内省と智慧の灯' },
-  { n: 21, char: 'כ', val: 20,  from: 4, to: 7,  tarot: '運命の輪',  meaning: 'サイクルと循環・宇宙の恵み' },
-  { n: 22, char: 'ל', val: 30,  from: 3, to: 6,  tarot: '正義',      meaning: 'カルマの均衡・教えと学び' },
-  { n: 23, char: 'מ', val: 40,  from: 5, to: 8,  tarot: '吊られた男', meaning: '無意識の深み・感情の海' },
-  { n: 24, char: 'נ', val: 50,  from: 6, to: 7,  tarot: '死神',      meaning: '変容・脱皮・鳳凰の昇華' },
-  { n: 25, char: 'ס', val: 60,  from: 6, to: 9,  tarot: '節制',      meaning: '精製と錬金術・高次の導き' },
-  { n: 26, char: 'ע', val: 70,  from: 6, to: 8,  tarot: '悪魔',      meaning: '物質への執着・見る力の深み' },
-  { n: 27, char: 'פ', val: 80,  from: 7, to: 8,  tarot: '塔',        meaning: '突破と解体・言葉の剣' },
-  { n: 28, char: 'צ', val: 90,  from: 7, to: 9,  tarot: '星',        meaning: '希望と宇宙的ビジョン' },
-  { n: 29, char: 'ק', val: 100, from: 7, to: 10, tarot: '月',        meaning: '幻想と夢・無意識の試練' },
-  { n: 30, char: 'ר', val: 200, from: 8, to: 9,  tarot: '太陽',      meaning: '自己の核・意識の中心' },
-  { n: 31, char: 'ש', val: 300, from: 8, to: 10, tarot: '審判',      meaning: '神聖な火・変容と精製' },
-  { n: 32, char: 'ת', val: 400, from: 9, to: 10, tarot: '世界',      meaning: '物質への最終顕現・完成' },
+  { n: 11, char: 'א', read: 'アレフ',   val: 1,   from: 1, to: 2,  tarot: '愚者',      meaning: '純粋な始まり・霊の息吹' },
+  { n: 12, char: 'ב', read: 'ベート',   val: 2,   from: 1, to: 3,  tarot: '魔術師',    meaning: '意志と言葉の創造力' },
+  { n: 13, char: 'ג', read: 'ギメル',   val: 3,   from: 1, to: 6,  tarot: '女教皇',    meaning: '直観・魂の旅路' },
+  { n: 14, char: 'ד', read: 'ダレット', val: 4,   from: 2, to: 3,  tarot: '女帝',      meaning: '愛と美の門・受容と育み' },
+  { n: 15, char: 'ה', read: 'ヘー',     val: 5,   from: 2, to: 6,  tarot: '皇帝',      meaning: '始まりと開口・新しい周期' },
+  { n: 16, char: 'ו', read: 'ヴァヴ',   val: 6,   from: 2, to: 4,  tarot: '教皇',      meaning: '上と下を繋ぐ釘' },
+  { n: 17, char: 'ז', read: 'ザイン',   val: 7,   from: 3, to: 6,  tarot: '恋人',      meaning: '選択と識別・二項の統合' },
+  { n: 18, char: 'ח', read: 'ヘット',   val: 8,   from: 3, to: 5,  tarot: '戦車',      meaning: '意志による制御・霊的勝利' },
+  { n: 19, char: 'ט', read: 'テット',   val: 9,   from: 4, to: 5,  tarot: '力',        meaning: '内なる野性を愛で馴らす' },
+  { n: 20, char: 'י', read: 'ヨッド',   val: 10,  from: 4, to: 6,  tarot: '隠者',      meaning: '孤独な内省と智慧の灯' },
+  { n: 21, char: 'כ', read: 'カフ',     val: 20,  from: 4, to: 7,  tarot: '運命の輪',  meaning: 'サイクルと循環・宇宙の恵み' },
+  { n: 22, char: 'ל', read: 'ラメッド', val: 30,  from: 3, to: 6,  tarot: '正義',      meaning: 'カルマの均衡・教えと学び' },
+  { n: 23, char: 'מ', read: 'メム',     val: 40,  from: 5, to: 8,  tarot: '吊られた男', meaning: '無意識の深み・感情の海' },
+  { n: 24, char: 'נ', read: 'ヌン',     val: 50,  from: 6, to: 7,  tarot: '死神',      meaning: '変容・脱皮・鳳凰の昇華' },
+  { n: 25, char: 'ס', read: 'サメク',   val: 60,  from: 6, to: 9,  tarot: '節制',      meaning: '精製と錬金術・高次の導き' },
+  { n: 26, char: 'ע', read: 'アイン',   val: 70,  from: 6, to: 8,  tarot: '悪魔',      meaning: '物質への執着・見る力の深み' },
+  { n: 27, char: 'פ', read: 'ペー',     val: 80,  from: 7, to: 8,  tarot: '塔',        meaning: '突破と解体・言葉の剣' },
+  { n: 28, char: 'צ', read: 'ツァディ', val: 90,  from: 7, to: 9,  tarot: '星',        meaning: '希望と宇宙的ビジョン' },
+  { n: 29, char: 'ק', read: 'クフ',     val: 100, from: 7, to: 10, tarot: '月',        meaning: '幻想と夢・無意識の試練' },
+  { n: 30, char: 'ר', read: 'レーシュ', val: 200, from: 8, to: 9,  tarot: '太陽',      meaning: '自己の核・意識の中心' },
+  { n: 31, char: 'ש', read: 'シン',     val: 300, from: 8, to: 10, tarot: '審判',      meaning: '神聖な火・変容と精製' },
+  { n: 32, char: 'ת', read: 'タヴ',     val: 400, from: 9, to: 10, tarot: '世界',      meaning: '物質への最終顕現・完成' },
 ];
 
 // パス番号 → パス情報
@@ -703,8 +704,9 @@ function analyze() {
     <div class="letter-chip" id="chip-${i}">
       <span class="lc-en">${c.en}</span>
       <span class="lc-he">${c.char}</span>
+      <span class="lc-read">${c.pathNums.length > 0 ? (pathByNum[c.pathNums[0]]?.read || c.name) : c.name}</span>
       <span class="lc-val">${c.val}</span>
-      <span class="lc-path">${c.pathNums.map(n => `P${n}`).join(' ')}</span>
+      <span class="lc-path">${c.pathNums.map(n => 'P'+n).join(' ')}</span>
     </div>
   `).join('');
   document.getElementById('conversionDisplay').style.display = 'block';
@@ -797,7 +799,7 @@ function analyze() {
     return `
       <div class="path-item">
         <div class="path-badge ${isMulti ? 'multi' : ''}">Path ${p.n}</div>
-        <div class="path-letter">${p.char}</div>
+        <div class="path-letter">${p.char}<span style="display:block;font-family:'Inter',sans-serif;font-size:0.6rem;color:var(--gold-dim);margin-top:2px;">${p.read}</span></div>
         <div class="path-info">
           <div class="path-info-main">${fromS.nameJa} ↔ ${toS.nameJa}　／　${p.tarot}</div>
           <div class="path-info-sub">${p.meaning}</div>
