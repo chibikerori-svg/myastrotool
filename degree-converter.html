@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>度数変換ツール</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Serif+JP:wght@300;400&display=swap');
+
+  :root {
+    --gold: #c9a96e;
+    --gold-light: #e8d5a3;
+    --cream: #f5ede0;
+    --indigo: #2d2456;
+    --indigo-deep: #1a1533;
+    --purple: #6b5b95;
+    --purple-mist: rgba(107,91,149,0.15);
+    --text: #2a1f3d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: var(--indigo-deep);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Serif JP', serif;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(107,91,149,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,169,110,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--gold-light);
+    border-radius: 50%;
+    opacity: 0;
+    animation: twinkle var(--dur) ease-in-out infinite var(--delay);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; }
+    50% { opacity: var(--max-opacity); }
+  }
+
+  .container {
+    width: 100%;
+    max-width: 480px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .title-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+  }
+
+  .title-ja {
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--cream);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+  }
+
+  .divider {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0.75rem auto;
+  }
+
+  .card {
+    background: rgba(45,36,86,0.6);
+    border: 1px solid rgba(201,169,110,0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .card-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    opacity: 0.9;
+  }
+
+  .glyph {
+    font-size: 1.1rem;
+    margin-right: 0.4rem;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+    margin-bottom: 1.25rem;
+  }
+
+  .input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .input-group label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-light);
+    opacity: 0.7;
+  }
+
+  input[type="number"], select {
+    width: 100%;
+    background: rgba(26,21,51,0.8);
+    border: 1px solid rgba(201,169,110,0.25);
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+
+  input[type="number"]:focus, select:focus {
+    border-color: rgba(201,169,110,0.6);
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+
+  select option {
+    background: var(--indigo-deep);
+    color: var(--cream);
+  }
+
+  .btn {
+    width: 100%;
+    padding: 0.85rem;
+    background: linear-gradient(135deg, rgba(201,169,110,0.2), rgba(107,91,149,0.3));
+    border: 1px solid rgba(201,169,110,0.4);
+    border-radius: 10px;
+    color: var(--gold-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,169,110,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .btn:hover::after { opacity: 1; }
+  .btn:hover { border-color: rgba(201,169,110,0.7); }
+  .btn:active { transform: scale(0.99); }
+
+  .result-box {
+    min-height: 60px;
+    background: rgba(26,21,51,0.6);
+    border: 1px solid rgba(201,169,110,0.15);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s;
+  }
+
+  .result-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .result-text .sign-symbol {
+    color: var(--gold);
+    font-size: 1.6rem;
+  }
+
+  .result-text .degree-num {
+    color: var(--gold-light);
+  }
+
+  .result-placeholder {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    color: rgba(201,169,110,0.3);
+    letter-spacing: 0.15em;
+  }
+
+  .error-text {
+    color: rgba(255,150,150,0.8);
+    font-size: 0.85rem;
+    font-family: 'Noto Serif JP', serif;
+    letter-spacing: 0.05em;
+  }
+
+  .signs-ref {
+    background: rgba(45,36,86,0.4);
+    border: 1px solid rgba(201,169,110,0.12);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .signs-ref-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .signs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .sign-item {
+    text-align: center;
+    padding: 0.3rem 0.2rem;
+    border-radius: 6px;
+    background: rgba(26,21,51,0.4);
+    border: 1px solid rgba(201,169,110,0.08);
+    cursor: default;
+  }
+
+  .sign-item .sym {
+    font-size: 1rem;
+    display: block;
+    color: var(--gold);
+  }
+
+  .sign-item .name {
+    font-size: 0.5rem;
+    color: var(--cream);
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-top: 0.1rem;
+  }
+
+  .sign-item .range {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.6rem;
+    color: var(--gold-light);
+    opacity: 0.5;
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in { animation: fadeIn 0.35s ease forwards; }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+  <header>
+    <p class="title-en">Ecliptic Degree Converter</p>
+    <h1 class="title-ja">度数変換</h1>
+    <div class="divider"></div>
+  </header>
+
+  <!-- 360度 → 星座 -->
+  <div class="card">
+    <p class="card-label"><span class="glyph">☽</span> 360度 → 星座・度数</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>黄道上の度数（0〜359.99）</label>
+        <input type="number" id="ecl-input" placeholder="例：215.5" min="0" max="359.99" step="0.01">
+      </div>
+    </div>
+    <button class="btn" onclick="convertToDMS()">変換する</button>
+    <div class="result-box" id="dms-result">
+      <span class="result-placeholder">結果がここに表示されます</span>
+    </div>
+  </div>
+
+  <!-- 星座 → 360度 -->
+  <div class="card">
+    <p class="card-label"><span class="glyph">☉</span> 星座・度数 → 360度</p>
+    <div class="input-row">
+      <div class="input-group">
+        <label>星座</label>
+        <select id="sign-select">
+          <option value="0">♈ 牡羊座</option>
+          <option value="1">♉ 牡牛座</option>
+          <option value="2">♊ 双子座</option>
+          <option value="3">♋ 蟹座</option>
+          <option value="4">♌ 獅子座</option>
+          <option value="5">♍ 乙女座</option>
+          <option value="6">♎ 天秤座</option>
+          <option value="7">♏ 蠍座</option>
+          <option value="8">♐ 射手座</option>
+          <option value="9">♑ 山羊座</option>
+          <option value="10">♒ 水瓶座</option>
+          <option value="11">♓ 魚座</option>
+        </select>
+      </div>
+      <div class="input-group" style="max-width:90px">
+        <label>度（0〜29）</label>
+        <input type="number" id="deg-input" placeholder="0" min="0" max="29" step="1" value="0">
+      </div>
+      <div class="input-group" style="max-width:90px">
+        <label>分（0〜59）</label>
+        <input type="number" id="min-input" placeholder="0" min="0" max="59" step="1" value="0">
+      </div>
+    </div>
+    <button class="btn" onclick="convertToEcl()">変換する</button>
+    <div class="result-box" id="ecl-result">
+      <span class="result-placeholder">結果がここに表示されます</span>
+    </div>
+  </div>
+
+  <!-- 星座早見 -->
+  <div class="signs-ref">
+    <p class="signs-ref-title">Signs Reference</p>
+    <div class="signs-grid" id="signs-grid"></div>
+  </div>
+</div>
+
+<script>
+const SIGNS = [
+  { name:'牡羊座', symbol:'♈', en:'Aries' },
+  { name:'牡牛座', symbol:'♉', en:'Taurus' },
+  { name:'双子座', symbol:'♊', en:'Gemini' },
+  { name:'蟹座',   symbol:'♋', en:'Cancer' },
+  { name:'獅子座', symbol:'♌', en:'Leo' },
+  { name:'乙女座', symbol:'♍', en:'Virgo' },
+  { name:'天秤座', symbol:'♎', en:'Libra' },
+  { name:'蠍座',   symbol:'♏', en:'Scorpio' },
+  { name:'射手座', symbol:'♐', en:'Sagittarius' },
+  { name:'山羊座', symbol:'♑', en:'Capricorn' },
+  { name:'水瓶座', symbol:'♒', en:'Aquarius' },
+  { name:'魚座',   symbol:'♓', en:'Pisces' },
+];
+
+// 星座早見表を生成
+const grid = document.getElementById('signs-grid');
+SIGNS.forEach((s, i) => {
+  const start = i * 30;
+  const end = start + 30;
+  const item = document.createElement('div');
+  item.className = 'sign-item';
+  item.innerHTML = `<span class="sym">${s.symbol}</span><span class="name">${s.name}</span><span class="range">${start}°–${end}°</span>`;
+  grid.appendChild(item);
+});
+
+// 360度 → 星座
+function convertToDMS() {
+  const val = parseFloat(document.getElementById('ecl-input').value);
+  const box = document.getElementById('dms-result');
+
+  if (isNaN(val) || val < 0 || val >= 360) {
+    box.innerHTML = '<span class="error-text">0〜359.99の範囲で入力してください</span>';
+    return;
+  }
+
+  const signIdx = Math.floor(val / 30);
+  const rem = val - signIdx * 30;
+  const deg = Math.floor(rem);
+  const minF = (rem - deg) * 60;
+  const min = Math.floor(minF);
+  const sec = Math.round((minF - min) * 60);
+
+  const sign = SIGNS[signIdx];
+  let txt = `<span class="sign-symbol">${sign.symbol} ${sign.name}</span><br>`;
+  txt += `<span class="degree-num">${deg}°`;
+  if (min > 0 || sec > 0) txt += ` ${min}′`;
+  if (sec > 0) txt += ` ${sec}″`;
+  txt += `</span>`;
+
+  // サビアン度数（整数部分+1）
+  const sabian = deg + 1;
+  if (sabian <= 30) {
+    txt += `<br><span style="font-size:0.75rem;color:rgba(201,169,110,0.55);letter-spacing:0.1em;">サビアン ${sabian}度</span>`;
+  }
+
+  box.innerHTML = `<div class="result-text fade-in">${txt}</div>`;
+}
+
+// 星座 → 360度
+function convertToEcl() {
+  const signIdx = parseInt(document.getElementById('sign-select').value);
+  const deg = parseInt(document.getElementById('deg-input').value) || 0;
+  const min = parseInt(document.getElementById('min-input').value) || 0;
+  const box = document.getElementById('ecl-result');
+
+  if (deg < 0 || deg > 29) {
+    box.innerHTML = '<span class="error-text">度は0〜29で入力してください</span>';
+    return;
+  }
+  if (min < 0 || min > 59) {
+    box.innerHTML = '<span class="error-text">分は0〜59で入力してください</span>';
+    return;
+  }
+
+  const total = signIdx * 30 + deg + min / 60;
+  const sabian = deg + 1;
+
+  let txt = `<span class="degree-num">${total.toFixed(4)}°</span>`;
+  txt += `<br><span style="font-size:0.75rem;color:rgba(201,169,110,0.55);letter-spacing:0.1em;">サビアン ${sabian}度</span>`;
+
+  box.innerHTML = `<div class="result-text fade-in">${txt}</div>`;
+}
+
+// Enterキーでも変換
+document.getElementById('ecl-input').addEventListener('keydown', e => { if (e.key==='Enter') convertToDMS(); });
+document.getElementById('deg-input').addEventListener('keydown', e => { if (e.key==='Enter') convertToEcl(); });
+document.getElementById('min-input').addEventListener('keydown', e => { if (e.key==='Enter') convertToEcl(); });
+
+// 星空
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 60; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.cssText = `
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    --dur:${2+Math.random()*4}s;
+    --delay:${Math.random()*5}s;
+    --max-opacity:${0.2+Math.random()*0.5};
+    width:${Math.random()>0.7?3:2}px;
+    height:${Math.random()>0.7?3:2}px;
+  `;
+  starsEl.appendChild(s);
+}
+</script>
+</body>
+</html>
