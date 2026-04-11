@@ -197,6 +197,45 @@
     .lc-val { font-size: 0.8rem; color: var(--purple-light); font-weight: 500; }
     .lc-path { font-size: 0.68rem; color: var(--text-dim); }
 
+    .lc-type {
+      font-size: 0.6rem;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+    .lc-type.mother { background: rgba(180,120,50,0.25); color: #e8b86e; border: 1px solid rgba(180,120,50,0.5); }
+    .lc-type.double { background: rgba(80,160,80,0.2); color: #7dd87d; border: 1px solid rgba(80,160,80,0.4); }
+    .lc-type.simple { background: rgba(80,100,200,0.2); color: #a0b0f0; border: 1px solid rgba(80,100,200,0.4); }
+
+    .type-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+      flex-shrink: 0;
+    }
+    .type-dot.mother { background: #e8b86e; }
+    .type-dot.double { background: #7dd87d; }
+    .type-dot.simple { background: #a0b0f0; }
+
+    .type-legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      padding: 10px 14px;
+      background: var(--bg-panel);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .type-legend-item {
+      display: flex;
+      align-items: center;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
     /* Tree of Life SVG */
     .tree-wrapper {
       display: flex;
@@ -566,28 +605,28 @@ const SEPHIROT = [
 
 // 22パス：{ path番号, 文字, 接続セフィラ2つ, タロット, 意味 }
 const PATHS = [
-  { n: 11, char: 'א', read: 'アレフ',   val: 1,   from: 1, to: 2,  tarot: '愚者',      meaning: '純粋な始まり・霊の息吹' },
-  { n: 12, char: 'ב', read: 'ベート',   val: 2,   from: 1, to: 3,  tarot: '魔術師',    meaning: '意志と言葉の創造力' },
-  { n: 13, char: 'ג', read: 'ギメル',   val: 3,   from: 1, to: 6,  tarot: '女教皇',    meaning: '直観・魂の旅路' },
-  { n: 14, char: 'ד', read: 'ダレット', val: 4,   from: 2, to: 3,  tarot: '女帝',      meaning: '愛と美の門・受容と育み' },
-  { n: 15, char: 'ה', read: 'ヘー',     val: 5,   from: 2, to: 6,  tarot: '皇帝',      meaning: '始まりと開口・新しい周期' },
-  { n: 16, char: 'ו', read: 'ヴァヴ',   val: 6,   from: 2, to: 4,  tarot: '教皇',      meaning: '上と下を繋ぐ釘' },
-  { n: 17, char: 'ז', read: 'ザイン',   val: 7,   from: 3, to: 6,  tarot: '恋人',      meaning: '選択と識別・二項の統合' },
-  { n: 18, char: 'ח', read: 'ヘット',   val: 8,   from: 3, to: 5,  tarot: '戦車',      meaning: '意志による制御・霊的勝利' },
-  { n: 19, char: 'ט', read: 'テット',   val: 9,   from: 4, to: 5,  tarot: '力',        meaning: '内なる野性を愛で馴らす' },
-  { n: 20, char: 'י', read: 'ヨッド',   val: 10,  from: 4, to: 6,  tarot: '隠者',      meaning: '孤独な内省と智慧の灯' },
-  { n: 21, char: 'כ', read: 'カフ',     val: 20,  from: 4, to: 7,  tarot: '運命の輪',  meaning: 'サイクルと循環・宇宙の恵み' },
-  { n: 22, char: 'ל', read: 'ラメッド', val: 30,  from: 3, to: 6,  tarot: '正義',      meaning: 'カルマの均衡・教えと学び' },
-  { n: 23, char: 'מ', read: 'メム',     val: 40,  from: 5, to: 8,  tarot: '吊られた男', meaning: '無意識の深み・感情の海' },
-  { n: 24, char: 'נ', read: 'ヌン',     val: 50,  from: 6, to: 7,  tarot: '死神',      meaning: '変容・脱皮・鳳凰の昇華' },
-  { n: 25, char: 'ס', read: 'サメク',   val: 60,  from: 6, to: 9,  tarot: '節制',      meaning: '精製と錬金術・高次の導き' },
-  { n: 26, char: 'ע', read: 'アイン',   val: 70,  from: 6, to: 8,  tarot: '悪魔',      meaning: '物質への執着・見る力の深み' },
-  { n: 27, char: 'פ', read: 'ペー',     val: 80,  from: 7, to: 8,  tarot: '塔',        meaning: '突破と解体・言葉の剣' },
-  { n: 28, char: 'צ', read: 'ツァディ', val: 90,  from: 7, to: 9,  tarot: '星',        meaning: '希望と宇宙的ビジョン' },
-  { n: 29, char: 'ק', read: 'クフ',     val: 100, from: 7, to: 10, tarot: '月',        meaning: '幻想と夢・無意識の試練' },
-  { n: 30, char: 'ר', read: 'レーシュ', val: 200, from: 8, to: 9,  tarot: '太陽',      meaning: '自己の核・意識の中心' },
-  { n: 31, char: 'ש', read: 'シン',     val: 300, from: 8, to: 10, tarot: '審判',      meaning: '神聖な火・変容と精製' },
-  { n: 32, char: 'ת', read: 'タヴ',     val: 400, from: 9, to: 10, tarot: '世界',      meaning: '物質への最終顕現・完成' },
+  { n: 11, char: 'א', read: 'アレフ',   val: 1,   type: 'mother', typeLabel: '母音字', from: 1, to: 2,  tarot: '愚者',      meaning: '純粋な始まり・霊の息吹' },
+  { n: 12, char: 'ב', read: 'ベート',   val: 2,   type: 'double', typeLabel: '複字',   from: 1, to: 3,  tarot: '魔術師',    meaning: '意志と言葉の創造力' },
+  { n: 13, char: 'ג', read: 'ギメル',   val: 3,   type: 'double', typeLabel: '複字',   from: 1, to: 6,  tarot: '女教皇',    meaning: '直観・魂の旅路' },
+  { n: 14, char: 'ד', read: 'ダレット', val: 4,   type: 'double', typeLabel: '複字',   from: 2, to: 3,  tarot: '女帝',      meaning: '愛と美の門・受容と育み' },
+  { n: 15, char: 'ה', read: 'ヘー',     val: 5,   type: 'simple', typeLabel: '単純字', from: 2, to: 6,  tarot: '皇帝',      meaning: '始まりと開口・新しい周期' },
+  { n: 16, char: 'ו', read: 'ヴァヴ',   val: 6,   type: 'simple', typeLabel: '単純字', from: 2, to: 4,  tarot: '教皇',      meaning: '上と下を繋ぐ釘' },
+  { n: 17, char: 'ז', read: 'ザイン',   val: 7,   type: 'simple', typeLabel: '単純字', from: 3, to: 6,  tarot: '恋人',      meaning: '選択と識別・二項の統合' },
+  { n: 18, char: 'ח', read: 'ヘット',   val: 8,   type: 'simple', typeLabel: '単純字', from: 3, to: 5,  tarot: '戦車',      meaning: '意志による制御・霊的勝利' },
+  { n: 19, char: 'ט', read: 'テット',   val: 9,   type: 'simple', typeLabel: '単純字', from: 4, to: 5,  tarot: '力',        meaning: '内なる野性を愛で馴らす' },
+  { n: 20, char: 'י', read: 'ヨッド',   val: 10,  type: 'simple', typeLabel: '単純字', from: 4, to: 6,  tarot: '隠者',      meaning: '孤独な内省と智慧の灯' },
+  { n: 21, char: 'כ', read: 'カフ',     val: 20,  type: 'double', typeLabel: '複字',   from: 4, to: 7,  tarot: '運命の輪',  meaning: 'サイクルと循環・宇宙の恵み' },
+  { n: 22, char: 'ל', read: 'ラメッド', val: 30,  type: 'simple', typeLabel: '単純字', from: 3, to: 6,  tarot: '正義',      meaning: 'カルマの均衡・教えと学び' },
+  { n: 23, char: 'מ', read: 'メム',     val: 40,  type: 'mother', typeLabel: '母音字', from: 5, to: 8,  tarot: '吊られた男', meaning: '無意識の深み・感情の海' },
+  { n: 24, char: 'נ', read: 'ヌン',     val: 50,  type: 'simple', typeLabel: '単純字', from: 6, to: 7,  tarot: '死神',      meaning: '変容・脱皮・鳳凰の昇華' },
+  { n: 25, char: 'ס', read: 'サメク',   val: 60,  type: 'simple', typeLabel: '単純字', from: 6, to: 9,  tarot: '節制',      meaning: '精製と錬金術・高次の導き' },
+  { n: 26, char: 'ע', read: 'アイン',   val: 70,  type: 'simple', typeLabel: '単純字', from: 6, to: 8,  tarot: '悪魔',      meaning: '物質への執着・見る力の深み' },
+  { n: 27, char: 'פ', read: 'ペー',     val: 80,  type: 'double', typeLabel: '複字',   from: 7, to: 8,  tarot: '塔',        meaning: '突破と解体・言葉の剣' },
+  { n: 28, char: 'צ', read: 'ツァディ', val: 90,  type: 'simple', typeLabel: '単純字', from: 7, to: 9,  tarot: '星',        meaning: '希望と宇宙的ビジョン' },
+  { n: 29, char: 'ק', read: 'クフ',     val: 100, type: 'simple', typeLabel: '単純字', from: 7, to: 10, tarot: '月',        meaning: '幻想と夢・無意識の試練' },
+  { n: 30, char: 'ר', read: 'レーシュ', val: 200, type: 'double', typeLabel: '複字',   from: 8, to: 9,  tarot: '太陽',      meaning: '自己の核・意識の中心' },
+  { n: 31, char: 'ש', read: 'シン',     val: 300, type: 'mother', typeLabel: '母音字', from: 8, to: 10, tarot: '審判',      meaning: '神聖な火・変容と精製' },
+  { n: 32, char: 'ת', read: 'タヴ',     val: 400, type: 'double', typeLabel: '複字',   from: 9, to: 10, tarot: '世界',      meaning: '物質への最終顕現・完成' },
 ];
 
 // パス番号 → パス情報
@@ -700,15 +739,20 @@ function analyze() {
 
   // 変換表示
   const convRow = document.getElementById('conversionRow');
-  convRow.innerHTML = chips.map((c, i) => `
+  convRow.innerHTML = chips.map((c, i) => {
+    const path0 = c.pathNums.length > 0 ? pathByNum[c.pathNums[0]] : null;
+    const typeClass = path0 ? path0.type : '';
+    const typeLabel = path0 ? path0.typeLabel : '';
+    return `
     <div class="letter-chip" id="chip-${i}">
       <span class="lc-en">${c.en}</span>
       <span class="lc-he">${c.char}</span>
-      <span class="lc-read">${c.pathNums.length > 0 ? (pathByNum[c.pathNums[0]]?.read || c.name) : c.name}</span>
+      <span class="lc-read">${path0 ? path0.read : c.name}</span>
       <span class="lc-val">${c.val}</span>
+      ${typeLabel ? `<span class="lc-type ${typeClass}">${typeLabel}</span>` : ''}
       <span class="lc-path">${c.pathNums.map(n => 'P'+n).join(' ')}</span>
     </div>
-  `).join('');
+  `}).join('');
   document.getElementById('conversionDisplay').style.display = 'block';
 
   // 数値
@@ -792,16 +836,28 @@ function analyze() {
     return;
   }
 
-  pathListEl.innerHTML = sortedPaths.map(p => {
+  // 凡例
+  const legendHtml = `
+    <div class="type-legend">
+      <div class="type-legend-item"><span class="type-dot mother"></span>母音字（三元素：風・水・火）</div>
+      <div class="type-legend-item"><span class="type-dot double"></span>複字（七惑星：2面性）</div>
+      <div class="type-legend-item"><span class="type-dot simple"></span>単純字（黄道十二宮）</div>
+    </div>`;
+
+  pathListEl.innerHTML = legendHtml + sortedPaths.map(p => {
     const fromS = getSephiraById(p.from);
     const toS = getSephiraById(p.to);
     const isMulti = p.count >= 2;
+    const dotColor = p.type === 'mother' ? '#e8b86e' : p.type === 'double' ? '#7dd87d' : '#a0b0f0';
     return `
       <div class="path-item">
         <div class="path-badge ${isMulti ? 'multi' : ''}">Path ${p.n}</div>
         <div class="path-letter">${p.char}<span style="display:block;font-family:'Inter',sans-serif;font-size:0.6rem;color:var(--gold-dim);margin-top:2px;">${p.read}</span></div>
         <div class="path-info">
-          <div class="path-info-main">${fromS.nameJa} ↔ ${toS.nameJa}　／　${p.tarot}</div>
+          <div class="path-info-main" style="display:flex;align-items:center;gap:6px;">
+            <span class="type-dot ${p.type}" style="flex-shrink:0;"></span>
+            <span><span style="font-size:0.72rem;font-weight:600;color:${dotColor};">${p.typeLabel}</span>　${fromS.nameJa} ↔ ${toS.nameJa}　／　${p.tarot}</span>
+          </div>
           <div class="path-info-sub">${p.meaning}</div>
         </div>
         <div class="path-count">${p.count > 1 ? `×${p.count}` : ''}</div>
