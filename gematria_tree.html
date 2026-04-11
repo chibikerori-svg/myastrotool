@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gematria × Tree of Life</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+Hebrew:wght@300;400;600&family=Inter:wght@300;400;500&display=swap');
+
+    :root {
+      --bg-deep: #0a0a0f;
+      --bg-card: #111118;
+      --bg-panel: #16161f;
+      --gold: #c9a84c;
+      --gold-light: #e8c96e;
+      --gold-dim: #7a6030;
+      --purple: #6b4fa0;
+      --purple-light: #9b7fd4;
+      --text: #e8e4d9;
+      --text-dim: #8a8070;
+      --border: #2a2535;
+      --glow: rgba(201, 168, 76, 0.15);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(107, 79, 160, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(201, 168, 76, 0.05) 0%, transparent 60%);
+    }
+
+    .header { text-align: center; margin-bottom: 40px; }
+
+    .star-of-david {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+      filter: drop-shadow(0 0 12px var(--gold));
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; filter: drop-shadow(0 0 12px var(--gold)); }
+      50% { opacity: 0.7; filter: drop-shadow(0 0 24px var(--gold-light)); }
+    }
+
+    .title {
+      font-family: 'Cinzel', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 3px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 820px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+
+    .card-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      color: var(--gold-dim);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* Input */
+    .input-row {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .name-input {
+      flex: 1;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      padding: 14px 20px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .name-input:focus {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .name-input::placeholder {
+      color: var(--text-dim);
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+
+    .calc-btn {
+      background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+      border: none;
+      border-radius: 10px;
+      color: #0a0a0f;
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 14px 24px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .calc-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .calc-btn:active { transform: translateY(0); }
+
+    /* Conversion display */
+    .conversion-display {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--bg-panel);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .conversion-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .letter-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-width: 64px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .letter-chip.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(201, 168, 76, 0.3);
+    }
+
+    .lc-en { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 1px; }
+    .lc-he { font-family: 'Noto Serif Hebrew', serif; font-size: 1.6rem; color: var(--gold-light); line-height: 1; }
+    .lc-val { font-size: 0.8rem; color: var(--purple-light); font-weight: 500; }
+    .lc-path { font-size: 0.68rem; color: var(--text-dim); }
+
+    /* Tree of Life SVG */
+    .tree-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    #treeSvg {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+    }
+
+    .sephira-circle {
+      fill: var(--bg-panel);
+      stroke: var(--border);
+      stroke-width: 1.5;
+      transition: fill 0.4s, stroke 0.4s;
+    }
+
+    .sephira-circle.active {
+      fill: rgba(201, 168, 76, 0.15);
+      stroke: var(--gold);
+    }
+
+    .sephira-label {
+      fill: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 7px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+      transition: fill 0.4s;
+    }
+
+    .sephira-label.active { fill: var(--gold-light); }
+
+    .sephira-num {
+      fill: var(--text-dim);
+      font-size: 6px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+    }
+
+    .path-line {
+      stroke: #2a2535;
+      stroke-width: 1.5;
+      transition: stroke 0.4s, stroke-width 0.4s, opacity 0.4s;
+      opacity: 0.4;
+    }
+
+    .path-line.active {
+      stroke: var(--gold);
+      stroke-width: 3;
+      opacity: 1;
+      filter: drop-shadow(0 0 4px rgba(201,168,76,0.6));
+    }
+
+    .path-line.multi {
+      stroke: var(--gold-light);
+      stroke-width: 5;
+      opacity: 1;
+      filter: drop-shadow(0 0 8px rgba(232,201,110,0.8));
+    }
+
+    .path-num-label {
+      fill: var(--text-dim);
+      font-size: 5.5px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+      transition: fill 0.3s;
+    }
+
+    .path-num-label.active { fill: var(--gold); font-weight: bold; }
+
+    /* Results */
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 520px) {
+      .results-grid { grid-template-columns: 1fr; }
+    }
+
+    .result-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .result-box-label {
+      font-family: 'Cinzel', serif;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .result-box-num {
+      font-family: 'Cinzel', serif;
+      font-size: 2.2rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    /* Path list */
+    .path-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .path-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.3s;
+    }
+
+    .path-item:hover { border-color: var(--gold-dim); }
+
+    .path-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 0.75rem;
+      color: var(--gold);
+      background: rgba(201,168,76,0.1);
+      border: 1px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 3px 8px;
+      min-width: 36px;
+      text-align: center;
+    }
+
+    .path-badge.multi {
+      background: rgba(201,168,76,0.25);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+
+    .path-info { flex: 1; }
+    .path-info-main { font-size: 0.85rem; color: var(--text); }
+    .path-info-sub { font-size: 0.72rem; color: var(--text-dim); margin-top: 2px; }
+
+    .path-letter {
+      font-family: 'Noto Serif Hebrew', serif;
+      font-size: 1.4rem;
+      color: var(--purple-light);
+      min-width: 28px;
+      text-align: center;
+    }
+
+    .path-count {
+      font-size: 0.75rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      min-width: 20px;
+      text-align: right;
+    }
+
+    /* Flow analysis */
+    .flow-section { margin-top: 8px; }
+
+    .flow-title {
+      font-family: 'Cinzel', serif;
+      font-size: 0.72rem;
+      color: var(--gold-dim);
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .sephira-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sephira-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sephira-bar-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      min-width: 80px;
+    }
+
+    .sephira-bar-name.active { color: var(--gold); }
+
+    .sephira-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--bg-panel);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .sephira-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      transition: width 0.6s ease;
+      width: 0%;
+    }
+
+    .sephira-bar-count {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      min-width: 20px;
+      text-align: right;
+    }
+
+    .empty-msg {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 20px;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <span class="star-of-david">✡</span>
+  <div class="title">GEMATRIA × TREE OF LIFE</div>
+  <div class="subtitle">名前のエネルギーと生命の樹のパス</div>
+</div>
+
+<div class="container">
+
+  <!-- 入力 -->
+  <div class="card">
+    <div class="card-label">✦ Name Input — 名前入力</div>
+    <div class="input-row">
+      <input
+        type="text"
+        id="nameInput"
+        class="name-input"
+        placeholder="例: KEIKO"
+        oninput="this.value = this.value.toUpperCase()"
+        onkeydown="if(event.key==='Enter') analyze()"
+      >
+      <button class="calc-btn" onclick="analyze()">ANALYZE</button>
+    </div>
+    <div class="conversion-display" id="conversionDisplay">
+      <div class="card-label" style="margin-bottom:10px;">変換結果</div>
+      <div class="conversion-row" id="conversionRow"></div>
+    </div>
+  </div>
+
+  <!-- 生命の樹 + 数値 -->
+  <div class="card">
+    <div class="card-label">✦ Tree of Life — 生命の樹</div>
+    <div style="display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap;">
+      <div class="tree-wrapper" style="flex:1; min-width:220px;">
+        <svg id="treeSvg" viewBox="0 0 200 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- パスライン（セフィラの下に描画） -->
+          <g id="pathLines"></g>
+          <!-- セフィロト -->
+          <g id="sephirot"></g>
+          <!-- パス番号ラベル -->
+          <g id="pathLabels"></g>
+        </svg>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <div class="results-grid">
+          <div class="result-box">
+            <div class="result-box-label">TOTAL VALUE</div>
+            <div class="result-box-num" id="totalVal">—</div>
+          </div>
+          <div class="result-box">
+            <div class="result-box-label">REDUCED</div>
+            <div class="result-box-num" id="reducedVal">—</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="flow-title">◆ SEPHIRA FLOW — エネルギーの流れ</div>
+          <div class="sephira-bars" id="sephiraBars">
+            <div class="empty-msg">名前を入力してください</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- パス一覧 -->
+  <div class="card">
+    <div class="card-label">✦ Path Analysis — パス解析</div>
+    <div class="path-list" id="pathList">
+      <div class="empty-msg">名前を入力するとパスが表示されます</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>Gematria · גמטריא · Tree of Life</p>
+</footer>
+
+<script>
+// ── データ定義 ──
+
+const EN_TO_HE = {
+  'A': { char: 'א', name: 'Alef',   val: 1   },
+  'B': { char: 'ב', name: 'Bet',    val: 2   },
+  'C': { char: 'כ', name: 'Kaf',    val: 20  },
+  'D': { char: 'ד', name: 'Dalet',  val: 4   },
+  'E': { char: 'ה', name: 'He',     val: 5   },
+  'F': { char: 'פ', name: 'Pe',     val: 80  },
+  'G': { char: 'ג', name: 'Gimel',  val: 3   },
+  'H': { char: 'ח', name: 'Chet',   val: 8   },
+  'I': { char: 'י', name: 'Yod',    val: 10  },
+  'J': { char: 'י', name: 'Yod',    val: 10  },
+  'K': { char: 'כ', name: 'Kaf',    val: 20  },
+  'L': { char: 'ל', name: 'Lamed',  val: 30  },
+  'M': { char: 'מ', name: 'Mem',    val: 40  },
+  'N': { char: 'נ', name: 'Nun',    val: 50  },
+  'O': { char: 'ע', name: 'Ayin',   val: 70  },
+  'P': { char: 'פ', name: 'Pe',     val: 80  },
+  'Q': { char: 'ק', name: 'Qof',    val: 100 },
+  'R': { char: 'ר', name: 'Resh',   val: 200 },
+  'S': { char: 'ס', name: 'Samekh', val: 60  },
+  'T': { char: 'ת', name: 'Tav',    val: 400 },
+  'U': { char: 'ו', name: 'Vav',    val: 6   },
+  'V': { char: 'ו', name: 'Vav',    val: 6   },
+  'W': { char: 'ו', name: 'Vav',    val: 6   },
+  'X': { char: 'ס', name: 'Samekh', val: 60  },
+  'Y': { char: 'י', name: 'Yod',    val: 10  },
+  'Z': { char: 'ז', name: 'Zayin',  val: 7   },
+};
+
+// セフィロト（番号、名前、座標）
+const SEPHIROT = [
+  { num: 1,  name: 'Keter',   nameJa: 'ケテル',   x: 100, y: 22  },
+  { num: 2,  name: 'Chokmah', nameJa: 'コクマー',  x: 148, y: 55  },
+  { num: 3,  name: 'Binah',   nameJa: 'ビナー',   x: 52,  y: 55  },
+  { num: 4,  name: 'Chesed',  nameJa: 'ケセド',   x: 148, y: 130 },
+  { num: 5,  name: 'Geburah', nameJa: 'ゲブラー',  x: 52,  y: 130 },
+  { num: 6,  name: 'Tifaret', nameJa: 'ティファレト', x: 100, y: 172 },
+  { num: 7,  name: 'Netzach', nameJa: 'ネツァク',  x: 148, y: 230 },
+  { num: 8,  name: 'Hod',     nameJa: 'ホド',    x: 52,  y: 230 },
+  { num: 9,  name: 'Yesod',   nameJa: 'イェソド',  x: 100, y: 268 },
+  { num: 10, name: 'Malkut',  nameJa: 'マルクト',  x: 100, y: 318 },
+];
+
+// 22パス：{ path番号, 文字, 接続セフィラ2つ, タロット, 意味 }
+const PATHS = [
+  { n: 11, char: 'א', val: 1,   from: 1, to: 2,  tarot: '愚者',      meaning: '純粋な始まり・霊の息吹' },
+  { n: 12, char: 'ב', val: 2,   from: 1, to: 3,  tarot: '魔術師',    meaning: '意志と言葉の創造力' },
+  { n: 13, char: 'ג', val: 3,   from: 1, to: 6,  tarot: '女教皇',    meaning: '直観・魂の旅路' },
+  { n: 14, char: 'ד', val: 4,   from: 2, to: 3,  tarot: '女帝',      meaning: '愛と美の門・受容と育み' },
+  { n: 15, char: 'ה', val: 5,   from: 2, to: 6,  tarot: '皇帝',      meaning: '始まりと開口・新しい周期' },
+  { n: 16, char: 'ו', val: 6,   from: 2, to: 4,  tarot: '教皇',      meaning: '上と下を繋ぐ釘' },
+  { n: 17, char: 'ז', val: 7,   from: 3, to: 6,  tarot: '恋人',      meaning: '選択と識別・二項の統合' },
+  { n: 18, char: 'ח', val: 8,   from: 3, to: 5,  tarot: '戦車',      meaning: '意志による制御・霊的勝利' },
+  { n: 19, char: 'ט', val: 9,   from: 4, to: 5,  tarot: '力',        meaning: '内なる野性を愛で馴らす' },
+  { n: 20, char: 'י', val: 10,  from: 4, to: 6,  tarot: '隠者',      meaning: '孤独な内省と智慧の灯' },
+  { n: 21, char: 'כ', val: 20,  from: 4, to: 7,  tarot: '運命の輪',  meaning: 'サイクルと循環・宇宙の恵み' },
+  { n: 22, char: 'ל', val: 30,  from: 3, to: 6,  tarot: '正義',      meaning: 'カルマの均衡・教えと学び' },
+  { n: 23, char: 'מ', val: 40,  from: 5, to: 8,  tarot: '吊られた男', meaning: '無意識の深み・感情の海' },
+  { n: 24, char: 'נ', val: 50,  from: 6, to: 7,  tarot: '死神',      meaning: '変容・脱皮・鳳凰の昇華' },
+  { n: 25, char: 'ס', val: 60,  from: 6, to: 9,  tarot: '節制',      meaning: '精製と錬金術・高次の導き' },
+  { n: 26, char: 'ע', val: 70,  from: 6, to: 8,  tarot: '悪魔',      meaning: '物質への執着・見る力の深み' },
+  { n: 27, char: 'פ', val: 80,  from: 7, to: 8,  tarot: '塔',        meaning: '突破と解体・言葉の剣' },
+  { n: 28, char: 'צ', val: 90,  from: 7, to: 9,  tarot: '星',        meaning: '希望と宇宙的ビジョン' },
+  { n: 29, char: 'ק', val: 100, from: 7, to: 10, tarot: '月',        meaning: '幻想と夢・無意識の試練' },
+  { n: 30, char: 'ר', val: 200, from: 8, to: 9,  tarot: '太陽',      meaning: '自己の核・意識の中心' },
+  { n: 31, char: 'ש', val: 300, from: 8, to: 10, tarot: '審判',      meaning: '神聖な火・変容と精製' },
+  { n: 32, char: 'ת', val: 400, from: 9, to: 10, tarot: '世界',      meaning: '物質への最終顕現・完成' },
+];
+
+// パス番号 → パス情報
+const pathByNum = {};
+PATHS.forEach(p => { pathByNum[p.n] = p; });
+
+// ヘブライ文字値 → パス番号（複数対応）
+function valToPathNums(val) {
+  return PATHS.filter(p => p.val === val).map(p => p.n);
+}
+
+// デジタルルート
+function digitalRoot(n) {
+  if (n === 0) return 0;
+  return (n % 9 === 0) ? 9 : n % 9;
+}
+
+// ── SVG生成 ──
+
+function getSephiraById(num) {
+  return SEPHIROT.find(s => s.num === num);
+}
+
+function buildTree() {
+  const svg = document.getElementById('treeSvg');
+  const pathLinesG = document.getElementById('pathLines');
+  const sephirotG = document.getElementById('sephirot');
+  const pathLabelsG = document.getElementById('pathLabels');
+
+  // パスライン描画
+  PATHS.forEach(p => {
+    const from = getSephiraById(p.from);
+    const to = getSephiraById(p.to);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', from.x);
+    line.setAttribute('y1', from.y);
+    line.setAttribute('x2', to.x);
+    line.setAttribute('y2', to.y);
+    line.setAttribute('class', 'path-line');
+    line.setAttribute('id', `path-line-${p.n}`);
+    pathLinesG.appendChild(line);
+
+    // パス番号ラベル（中点）
+    const mx = (from.x + to.x) / 2;
+    const my = (from.y + to.y) / 2;
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('x', mx);
+    lbl.setAttribute('y', my);
+    lbl.setAttribute('class', 'path-num-label');
+    lbl.setAttribute('id', `path-lbl-${p.n}`);
+    lbl.textContent = p.n;
+    pathLabelsG.appendChild(lbl);
+  });
+
+  // セフィロト描画
+  SEPHIROT.forEach(s => {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('id', `sephira-${s.num}`);
+
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', s.x);
+    circle.setAttribute('cy', s.y);
+    circle.setAttribute('r', 16);
+    circle.setAttribute('class', 'sephira-circle');
+    g.appendChild(circle);
+
+    const name = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    name.setAttribute('x', s.x);
+    name.setAttribute('y', s.y - 3);
+    name.setAttribute('class', 'sephira-label');
+    name.setAttribute('id', `sephira-lbl-${s.num}`);
+    name.textContent = s.nameJa;
+    g.appendChild(name);
+
+    const num = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    num.setAttribute('x', s.x);
+    num.setAttribute('y', s.y + 7);
+    num.setAttribute('class', 'sephira-num');
+    num.textContent = s.num;
+    g.appendChild(num);
+
+    sephirotG.appendChild(g);
+  });
+}
+
+// ── 解析メイン ──
+
+function analyze() {
+  const input = document.getElementById('nameInput').value.trim().toUpperCase();
+  if (!input) return;
+
+  // 変換
+  const chips = [];
+  let total = 0;
+  const activePaths = {}; // pathNum -> count
+
+  [...input].forEach(ch => {
+    if (ch === ' ') return;
+    const entry = EN_TO_HE[ch];
+    if (!entry) return;
+
+    total += entry.val;
+    const pathNums = valToPathNums(entry.val);
+    pathNums.forEach(pn => {
+      activePaths[pn] = (activePaths[pn] || 0) + 1;
+    });
+
+    chips.push({ en: ch, ...entry, pathNums });
+  });
+
+  // 変換表示
+  const convRow = document.getElementById('conversionRow');
+  convRow.innerHTML = chips.map((c, i) => `
+    <div class="letter-chip" id="chip-${i}">
+      <span class="lc-en">${c.en}</span>
+      <span class="lc-he">${c.char}</span>
+      <span class="lc-val">${c.val}</span>
+      <span class="lc-path">${c.pathNums.map(n => `P${n}`).join(' ')}</span>
+    </div>
+  `).join('');
+  document.getElementById('conversionDisplay').style.display = 'block';
+
+  // 数値
+  document.getElementById('totalVal').textContent = total;
+  document.getElementById('reducedVal').textContent = digitalRoot(total);
+
+  // SVGのリセット
+  PATHS.forEach(p => {
+    const line = document.getElementById(`path-line-${p.n}`);
+    const lbl = document.getElementById(`path-lbl-${p.n}`);
+    if (line) { line.className.baseVal = 'path-line'; }
+    if (lbl) { lbl.className.baseVal = 'path-num-label'; }
+  });
+  SEPHIROT.forEach(s => {
+    const circle = document.querySelector(`#sephira-${s.num} .sephira-circle`);
+    const lbl = document.getElementById(`sephira-lbl-${s.num}`);
+    if (circle) circle.className.baseVal = 'sephira-circle';
+    if (lbl) lbl.className.baseVal = 'sephira-label';
+  });
+
+  // アクティブなパスとセフィラを光らせる
+  const activeSephirot = new Set();
+  Object.entries(activePaths).forEach(([pn, count]) => {
+    const line = document.getElementById(`path-line-${pn}`);
+    const lbl = document.getElementById(`path-lbl-${pn}`);
+    if (line) {
+      line.className.baseVal = count >= 2 ? 'path-line multi' : 'path-line active';
+    }
+    if (lbl) lbl.className.baseVal = 'path-num-label active';
+
+    const path = pathByNum[pn];
+    if (path) {
+      activeSephirot.add(path.from);
+      activeSephirot.add(path.to);
+    }
+  });
+
+  activeSephirot.forEach(sNum => {
+    const circle = document.querySelector(`#sephira-${sNum} .sephira-circle`);
+    const lbl = document.getElementById(`sephira-lbl-${sNum}`);
+    if (circle) circle.className.baseVal = 'sephira-circle active';
+    if (lbl) lbl.className.baseVal = 'sephira-label active';
+  });
+
+  // セフィラのエネルギー流量バー
+  const sephiraFlow = {};
+  SEPHIROT.forEach(s => { sephiraFlow[s.num] = 0; });
+  Object.entries(activePaths).forEach(([pn, count]) => {
+    const path = pathByNum[pn];
+    if (path) {
+      sephiraFlow[path.from] = (sephiraFlow[path.from] || 0) + count;
+      sephiraFlow[path.to] = (sephiraFlow[path.to] || 0) + count;
+    }
+  });
+  const maxFlow = Math.max(...Object.values(sephiraFlow), 1);
+
+  const barsEl = document.getElementById('sephiraBars');
+  barsEl.innerHTML = SEPHIROT.map(s => {
+    const flow = sephiraFlow[s.num] || 0;
+    const pct = (flow / maxFlow) * 100;
+    const isActive = flow > 0;
+    return `
+      <div class="sephira-bar-row">
+        <div class="sephira-bar-name ${isActive ? 'active' : ''}">${s.nameJa}</div>
+        <div class="sephira-bar-track">
+          <div class="sephira-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="sephira-bar-count">${flow}</div>
+      </div>
+    `;
+  }).join('');
+
+  // パスリスト
+  const pathListEl = document.getElementById('pathList');
+  const sortedPaths = Object.entries(activePaths)
+    .sort((a, b) => b[1] - a[1])
+    .map(([pn, count]) => ({ ...pathByNum[pn], count }));
+
+  if (sortedPaths.length === 0) {
+    pathListEl.innerHTML = '<div class="empty-msg">対応するパスが見つかりませんでした</div>';
+    return;
+  }
+
+  pathListEl.innerHTML = sortedPaths.map(p => {
+    const fromS = getSephiraById(p.from);
+    const toS = getSephiraById(p.to);
+    const isMulti = p.count >= 2;
+    return `
+      <div class="path-item">
+        <div class="path-badge ${isMulti ? 'multi' : ''}">Path ${p.n}</div>
+        <div class="path-letter">${p.char}</div>
+        <div class="path-info">
+          <div class="path-info-main">${fromS.nameJa} ↔ ${toS.nameJa}　／　${p.tarot}</div>
+          <div class="path-info-sub">${p.meaning}</div>
+        </div>
+        <div class="path-count">${p.count > 1 ? `×${p.count}` : ''}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// 初期化
+buildTree();
+
+// Enterキーでも動く
+document.getElementById('nameInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') analyze();
+});
+</script>
+</body>
+</html>
