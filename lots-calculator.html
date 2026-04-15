@@ -387,6 +387,7 @@ const LOTS = [
   {
     id: "pof", name: "Part of Fortune", ja: "フォーチュン",
     keyword: "物質・身体・現実の幸運",
+    path: "サメフ（ס）",
     color: "#b8935a",
     calc: (p, asc, diurnal) => diurnal
       ? mod360(asc + p.moon - p.sun)
@@ -396,6 +397,7 @@ const LOTS = [
   {
     id: "pos", name: "Part of Spirit", ja: "スピリット",
     keyword: "魂・意志・行動の方向",
+    path: "サメフ（ס）",
     color: "#4a7b9d",
     calc: (p, asc, diurnal) => diurnal
       ? mod360(asc + p.sun - p.moon)
@@ -405,6 +407,7 @@ const LOTS = [
   {
     id: "fat", name: "Part of Fatality", ja: "フェイタリティ",
     keyword: "宿命・カルマ・課題",
+    path: "ギメル（ג）",
     color: "#7b4a6e",
     calc: (p, asc, diurnal) => mod360(asc + p.sat - p.sun),
     formula: () => "ASC + ♄ − ☉"
@@ -412,6 +415,7 @@ const LOTS = [
   {
     id: "nec", name: "Necessity", ja: "ネセシティ",
     keyword: "必然の制約・繰り返す壁",
+    path: "ダアト",
     color: "#4a6e5a",
     calc: (p, asc, diurnal) => mod360(asc + p.sat - p.moon),
     formula: () => "ASC + ♄ − ☽"
@@ -419,6 +423,7 @@ const LOTS = [
   {
     id: "ero", name: "Eros", ja: "エロス",
     keyword: "内から湧く才能・欲求",
+    path: "ヌン（נ）",
     color: "#9d4a6e",
     calc: (p, asc, diurnal) => {
       const spirit = diurnal ? mod360(asc + p.sun - p.moon) : mod360(asc + p.moon - p.sun);
@@ -429,6 +434,7 @@ const LOTS = [
   {
     id: "cou", name: "Courage", ja: "カレッジ",
     keyword: "行動力・本領発揮の場",
+    path: "ラメド（ל）",
     color: "#9d6060",
     calc: (p, asc, diurnal) => {
       const fortune = diurnal ? mod360(asc + p.moon - p.sun) : mod360(asc + p.sun - p.moon);
@@ -439,6 +445,7 @@ const LOTS = [
   {
     id: "vic", name: "Victory", ja: "ビクトリー",
     keyword: "認められる・報われる場",
+    path: "ヨッド（י）",
     color: "#4a6e9d",
     calc: (p, asc, diurnal) => {
       const spirit = diurnal ? mod360(asc + p.sun - p.moon) : mod360(asc + p.moon - p.sun);
@@ -449,6 +456,7 @@ const LOTS = [
   {
     id: "nem", name: "Nemesis", ja: "ネメシス",
     keyword: "無意識の資質・隠れた才能",
+    path: "ダアト（ギメルのダアト寄り）",
     color: "#7b60a0",
     calc: (p, asc, diurnal) => {
       const fortune = diurnal ? mod360(asc + p.moon - p.sun) : mod360(asc + p.sun - p.moon);
@@ -459,6 +467,7 @@ const LOTS = [
   {
     id: "exalt", name: "Exaltation", ja: "エクソルタシオン",
     keyword: "外に出ると輝く資質",
+    path: "へー（ה）",
     color: "#c8a040",
     calc: (p, asc, diurnal) => mod360(asc + 18 - p.sun),
     formula: () => "ASC + ♈19° − ☉"
@@ -466,6 +475,7 @@ const LOTS = [
   {
     id: "delight", name: "Delight", ja: "ディライト",
     keyword: "外に出せる心地よさ・好きがそのまま魅力になる",
+    path: "ツァディ（צ）",
     color: "#c8a0b8",
     calc: (p, asc, diurnal) => mod360(asc + p.ven - p.moon),
     formula: () => "ASC + ♀ − ☽"
@@ -473,48 +483,55 @@ const LOTS = [
   {
     id: "comfort", name: "Comfort", ja: "コンフォート",
     keyword: "本当に落ち着ける場所・安心の土台",
+    path: "ツァディ（צ）",
     color: "#a0b8c8",
     calc: (p, asc, diurnal) => mod360(asc + p.moon - p.ven),
     formula: () => "ASC + ☽ − ♀"
   },
   {
-    id: "intel", name: "Intelligence", ja: "インテリジェンス（レーシュ）",
+    id: "intel", name: "Intelligence", ja: "インテリジェンス",
     keyword: "感情をどう翻訳して外に出すか",
+    path: "レーシュ（ר）",
     color: "#70a878",
     calc: (p, asc, diurnal) => mod360(asc + p.mer - p.moon),
     formula: () => "ASC + ☿ − ☽"
   },
   {
-    id: "skill", name: "Skill", ja: "スキル（メム）",
+    id: "skill", name: "Skill", ja: "スキル",
     keyword: "思考を行動に変える・技術の習得",
+    path: "メム（מ）",
     color: "#60a090",
     calc: (p, asc, diurnal) => mod360(asc + p.mer - p.mar),
     formula: () => "ASC + ☿ − ♂"
   },
   {
-    id: "mind", name: "Mind", ja: "マインド（アイン）",
+    id: "mind", name: "Mind", ja: "マインド",
     keyword: "自我と思考のズレ・一致",
+    path: "アイン（ע）",
     color: "#8878a0",
     calc: (p, asc, diurnal) => mod360(asc + p.mer - p.sun),
     formula: () => "ASC + ☿ − ☉"
   },
   {
-    id: "comm", name: "Communication", ja: "コミュニケーション（ぺー）",
+    id: "comm", name: "Communication", ja: "コミュニケーション",
     keyword: "どう言えば届くか・言語的な魅力",
+    path: "ぺー（פ）",
     color: "#a07890",
     calc: (p, asc, diurnal) => mod360(asc + p.mer - p.ven),
     formula: () => "ASC + ☿ − ♀"
   },
   {
-    id: "joy", name: "Joy", ja: "ジョイ（カフ）",
+    id: "joy", name: "Joy", ja: "ジョイ",
     keyword: "ちょうどいいサイズの喜び",
+    path: "カフ（כ）",
     color: "#a09040",
     calc: (p, asc, diurnal) => mod360(asc + p.ven - p.jup),
     formula: () => "ASC + ♀ − ♃"
   },
   {
-    id: "lux", name: "Luxury", ja: "ラグジュアリー（カフ）",
+    id: "lux", name: "Luxury", ja: "ラグジュアリー",
     keyword: "好きがどんどん膨らむ・豊かさの享受",
+    path: "カフ（כ）",
     color: "#c890a0",
     calc: (p, asc, diurnal) => mod360(asc + p.jup - p.ven),
     formula: () => "ASC + ♃ − ♀"
@@ -624,7 +641,7 @@ function calculate() {
       <div class="lot-info">
         <div class="lot-name">${lot.name}</div>
         <div class="lot-keyword">${lot.keyword}</div>
-        <div class="formula-line">${lot.formula(diurnal)}</div>
+        <div class="formula-line">${lot.formula(diurnal)}　／　${lot.path}</div>
       </div>
       <div class="lot-result">
         <div class="lot-degree">${result.deg}°${String(result.min).padStart(2,'0')}′</div>
