@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アラビックロット計算機</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1225;
+    --gold: #b8935a;
+    --gold-light: #d4af7a;
+    --cream: #f5f0e8;
+    --mist: #e8e0d4;
+    --purple-deep: #2c1f5e;
+    --purple-mid: #4a3580;
+    --purple-light: #7b68ae;
+    --pof: #b8935a;
+    --pos: #4a7b9d;
+    --fat: #7b4a6e;
+    --nec: #4a6e5a;
+    --ero: #9d4a6e;
+    --cou: #7b4a4a;
+    --vic: #4a6e9d;
+    --nem: #6e4a7b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Noto Serif JP', serif;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    background-image: 
+      radial-gradient(ellipse at 20% 20%, rgba(74,53,128,0.3) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(44,31,94,0.4) 0%, transparent 50%);
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(184,147,90,0.3);
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--gold-light);
+    margin-bottom: 0.4rem;
+  }
+
+  header p {
+    font-size: 0.75rem;
+    color: var(--purple-light);
+    letter-spacing: 0.2em;
+    font-weight: 300;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .input-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(184,147,90,0.2);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .time-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .time-label {
+    font-size: 0.75rem;
+    color: var(--purple-light);
+    letter-spacing: 0.15em;
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  .time-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex: 1;
+  }
+
+  .time-sep {
+    color: var(--gold);
+    font-size: 1rem;
+  }
+
+  input[type="number"], input[type="time"] {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(184,147,90,0.25);
+    border-radius: 3px;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    padding: 0.4rem 0.6rem;
+    width: 70px;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button { display: none; }
+
+  input[type="number"]:focus, input[type="time"]:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(184,147,90,0.08);
+  }
+
+  input[type="time"] {
+    width: 120px;
+  }
+
+  .planet-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  .planet-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .planet-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: var(--gold-light);
+    width: 56px;
+    flex-shrink: 0;
+  }
+
+  .deg-input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .deg-input-group input {
+    width: 52px;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.4rem;
+  }
+
+  .deg-input-group span {
+    font-size: 0.7rem;
+    color: var(--purple-light);
+  }
+
+  .sign-select {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(184,147,90,0.25);
+    border-radius: 3px;
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    padding: 0.35rem 0.4rem;
+    cursor: pointer;
+  }
+
+  .sign-select:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .calc-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, var(--purple-mid), var(--purple-deep));
+    border: 1px solid rgba(184,147,90,0.4);
+    border-radius: 4px;
+    color: var(--gold-light);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1rem;
+  }
+
+  .calc-btn:hover {
+    background: linear-gradient(135deg, var(--purple-light), var(--purple-mid));
+    border-color: var(--gold);
+  }
+
+  .diurnal-badge {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--purple-light);
+    margin-top: 0.6rem;
+    letter-spacing: 0.1em;
+    min-height: 1.2em;
+  }
+
+  .results {
+    display: none;
+  }
+
+  .results.show {
+    display: block;
+  }
+
+  .lot-card {
+    border: 1px solid rgba(184,147,90,0.15);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s;
+  }
+
+  .lot-card:hover {
+    border-color: rgba(184,147,90,0.35);
+  }
+
+  .lot-symbol {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    flex-shrink: 0;
+    border: 1px solid currentColor;
+    opacity: 0.85;
+  }
+
+  .lot-info {
+    flex: 1;
+  }
+
+  .lot-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+  }
+
+  .lot-keyword {
+    font-size: 0.7rem;
+    color: var(--purple-light);
+    letter-spacing: 0.12em;
+    margin-top: 0.1rem;
+  }
+
+  .lot-result {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .lot-degree {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+  }
+
+  .lot-sign {
+    font-size: 0.75rem;
+    color: var(--mist);
+    letter-spacing: 0.1em;
+    margin-top: 0.1rem;
+  }
+
+  .formula-line {
+    font-size: 0.65rem;
+    color: rgba(184,147,90,0.5);
+    letter-spacing: 0.08em;
+    margin-top: 0.15rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+
+  .error-msg {
+    color: #e07070;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 0.5rem;
+    display: none;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(184,147,90,0.3), transparent);
+    margin: 1.5rem 0;
+  }
+
+  @media (max-width: 480px) {
+    .planet-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Arabic Lots</h1>
+    <p>アラビックロット 計算機</p>
+  </header>
+
+  <div class="input-section">
+    <div class="section-title">出生時刻</div>
+    <div class="time-row">
+      <div class="time-label">時刻</div>
+      <input type="time" id="birthTime" value="12:00">
+    </div>
+    <div id="diurnalBadge" class="diurnal-badge"></div>
+  </div>
+
+  <div class="input-section">
+    <div class="section-title">惑星の度数</div>
+    <div class="planet-grid" id="planetGrid"></div>
+  </div>
+
+  <div class="input-section">
+    <div class="section-title">アセンダント</div>
+    <div class="planet-row">
+      <div class="planet-name">ASC</div>
+      <div class="deg-input-group">
+        <input type="number" id="asc_deg" min="0" max="29" value="" placeholder="0">
+        <span>°</span>
+        <input type="number" id="asc_min" min="0" max="59" value="" placeholder="00">
+        <span>′</span>
+      </div>
+      <select class="sign-select" id="asc_sign">
+        <option value="">星座</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="error-msg" id="errorMsg">入力を確認してください</div>
+  <button class="calc-btn" onclick="calculate()">計　算</button>
+
+  <div class="divider"></div>
+
+  <div class="results" id="results">
+    <div class="section-title">計算結果</div>
+    <div id="lotCards"></div>
+  </div>
+</div>
+
+<script>
+const SIGNS = ["牡羊座♈","牡牛座♉","双子座♊","蟹座♋","獅子座♌","乙女座♍","天秤座♎","蠍座♏","射手座♐","山羊座♑","水瓶座♒","魚座♓"];
+const SIGN_SHORT = ["♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"];
+
+const PLANETS = [
+  { id: "sun",  name: "☉ 太陽",  color: "#d4a040" },
+  { id: "moon", name: "☽ 月",    color: "#a0b4c8" },
+  { id: "mer",  name: "☿ 水星",  color: "#90a878" },
+  { id: "ven",  name: "♀ 金星",  color: "#c8a0b4" },
+  { id: "mar",  name: "♂ 火星",  color: "#c87060" },
+  { id: "jup",  name: "♃ 木星",  color: "#a0b4d4" },
+  { id: "sat",  name: "♄ 土星",  color: "#8090a0" },
+];
+
+const LOTS = [
+  {
+    id: "pof", name: "Part of Fortune", ja: "フォーチュン",
+    keyword: "物質・身体・現実の幸運",
+    color: "#b8935a",
+    calc: (p, asc, diurnal) => diurnal
+      ? mod360(asc + p.moon - p.sun)
+      : mod360(asc + p.sun - p.moon),
+    formula: (d) => d ? "ASC + ☽ − ☉" : "ASC + ☉ − ☽"
+  },
+  {
+    id: "pos", name: "Part of Spirit", ja: "スピリット",
+    keyword: "魂・意志・行動の方向",
+    color: "#4a7b9d",
+    calc: (p, asc, diurnal) => diurnal
+      ? mod360(asc + p.sun - p.moon)
+      : mod360(asc + p.moon - p.sun),
+    formula: (d) => d ? "ASC + ☉ − ☽" : "ASC + ☽ − ☉"
+  },
+  {
+    id: "fat", name: "Part of Fatality", ja: "フェイタリティ",
+    keyword: "宿命・カルマ・課題",
+    color: "#7b4a6e",
+    calc: (p, asc, diurnal) => mod360(asc + p.sat - p.sun),
+    formula: () => "ASC + ♄ − ☉"
+  },
+  {
+    id: "nec", name: "Necessity", ja: "ネセシティ",
+    keyword: "必然の制約・繰り返す壁",
+    color: "#4a6e5a",
+    calc: (p, asc, diurnal) => mod360(asc + p.sat - p.moon),
+    formula: () => "ASC + ♄ − ☽"
+  },
+  {
+    id: "ero", name: "Eros", ja: "エロス",
+    keyword: "内から湧く才能・欲求",
+    color: "#9d4a6e",
+    calc: (p, asc, diurnal) => {
+      const spirit = diurnal ? mod360(asc + p.sun - p.moon) : mod360(asc + p.moon - p.sun);
+      return diurnal ? mod360(asc + p.ven - spirit) : mod360(asc + spirit - p.ven);
+    },
+    formula: (d) => d ? "ASC + ♀ − Spirit" : "ASC + Spirit − ♀"
+  },
+  {
+    id: "cou", name: "Courage", ja: "カレッジ",
+    keyword: "行動力・本領発揮の場",
+    color: "#9d6060",
+    calc: (p, asc, diurnal) => {
+      const fortune = diurnal ? mod360(asc + p.moon - p.sun) : mod360(asc + p.sun - p.moon);
+      return mod360(asc + p.mar - fortune);
+    },
+    formula: () => "ASC + ♂ − Fortune"
+  },
+  {
+    id: "vic", name: "Victory", ja: "ビクトリー",
+    keyword: "認められる・報われる場",
+    color: "#4a6e9d",
+    calc: (p, asc, diurnal) => {
+      const spirit = diurnal ? mod360(asc + p.sun - p.moon) : mod360(asc + p.moon - p.sun);
+      return mod360(asc + p.jup - spirit);
+    },
+    formula: () => "ASC + ♃ − Spirit"
+  },
+  {
+    id: "nem", name: "Nemesis", ja: "ネメシス",
+    keyword: "無意識の資質・隠れた才能",
+    color: "#7b60a0",
+    calc: (p, asc, diurnal) => {
+      const fortune = diurnal ? mod360(asc + p.moon - p.sun) : mod360(asc + p.sun - p.moon);
+      return mod360(asc + fortune - p.sat);
+    },
+    formula: () => "ASC + Fortune − ♄"
+  },
+  {
+    id: "exalt", name: "Exaltation", ja: "エクソルタシオン",
+    keyword: "外に出ると輝く資質",
+    color: "#c8a040",
+    calc: (p, asc, diurnal) => mod360(asc + 18 - p.sun),
+    formula: () => "ASC + ♈19° − ☉"
+  },
+];
+
+function mod360(deg) {
+  return ((deg % 360) + 360) % 360;
+}
+
+function degToAbs(deg, min, signIndex) {
+  return signIndex * 30 + parseFloat(deg || 0) + parseFloat(min || 0) / 60;
+}
+
+function absToDegSign(abs) {
+  const norm = mod360(abs);
+  const signIdx = Math.floor(norm / 30);
+  const deg = norm - signIdx * 30;
+  const d = Math.floor(deg);
+  const m = Math.round((deg - d) * 60);
+  return { deg: d, min: m, sign: signIdx, signName: SIGNS[signIdx] };
+}
+
+function isDiurnal(timeStr) {
+  if (!timeStr) return true;
+  const [h] = timeStr.split(':').map(Number);
+  return h >= 6 && h < 18;
+}
+
+// Build planet inputs
+const grid = document.getElementById('planetGrid');
+PLANETS.forEach(p => {
+  const row = document.createElement('div');
+  row.className = 'planet-row';
+  row.innerHTML = `
+    <div class="planet-name" style="color:${p.color}">${p.name}</div>
+    <div class="deg-input-group">
+      <input type="number" id="${p.id}_deg" min="0" max="29" placeholder="0">
+      <span>°</span>
+      <input type="number" id="${p.id}_min" min="0" max="59" placeholder="00">
+      <span>′</span>
+    </div>
+    <select class="sign-select" id="${p.id}_sign">
+      <option value="">星座</option>
+      ${SIGNS.map((s,i)=>`<option value="${i}">${s}</option>`).join('')}
+    </select>
+  `;
+  grid.appendChild(row);
+});
+
+// Build ASC sign select
+const ascSign = document.getElementById('asc_sign');
+SIGNS.forEach((s,i) => {
+  const o = document.createElement('option');
+  o.value = i; o.textContent = s;
+  ascSign.appendChild(o);
+});
+
+// Diurnal badge update
+document.getElementById('birthTime').addEventListener('input', updateBadge);
+function updateBadge() {
+  const t = document.getElementById('birthTime').value;
+  const d = isDiurnal(t);
+  const badge = document.getElementById('diurnalBadge');
+  badge.textContent = d ? '☀ 昼生まれ（ダイユーナル）' : '☽ 夜生まれ（ノクターナル）';
+  badge.style.color = d ? '#d4a040' : '#a0b4c8';
+}
+updateBadge();
+
+function calculate() {
+  const err = document.getElementById('errorMsg');
+  err.style.display = 'none';
+
+  const timeStr = document.getElementById('birthTime').value;
+  const diurnal = isDiurnal(timeStr);
+
+  // Read planets
+  const p = {};
+  for (const planet of PLANETS) {
+    const deg = document.getElementById(`${planet.id}_deg`).value;
+    const min = document.getElementById(`${planet.id}_min`).value;
+    const sign = document.getElementById(`${planet.id}_sign`).value;
+    if (sign === '') { showError(`${planet.name}の星座を選んでください`); return; }
+    p[planet.id] = degToAbs(deg, min, parseInt(sign));
+  }
+
+  const ascDeg = document.getElementById('asc_deg').value;
+  const ascMin = document.getElementById('asc_min').value;
+  const ascSign = document.getElementById('asc_sign').value;
+  if (ascSign === '') { showError('ASCの星座を選んでください'); return; }
+  const asc = degToAbs(ascDeg, ascMin, parseInt(ascSign));
+
+  // Calculate all lots
+  const cards = document.getElementById('lotCards');
+  cards.innerHTML = '';
+
+  LOTS.forEach(lot => {
+    const absVal = lot.calc(p, asc, diurnal);
+    const result = absToDegSign(absVal);
+
+    const card = document.createElement('div');
+    card.className = 'lot-card';
+    card.innerHTML = `
+      <div class="lot-symbol" style="color:${lot.color}; border-color:${lot.color}">
+        ${lot.ja.charAt(0)}
+      </div>
+      <div class="lot-info">
+        <div class="lot-name">${lot.name}</div>
+        <div class="lot-keyword">${lot.keyword}</div>
+        <div class="formula-line">${lot.formula(diurnal)}</div>
+      </div>
+      <div class="lot-result">
+        <div class="lot-degree">${result.deg}°${String(result.min).padStart(2,'0')}′</div>
+        <div class="lot-sign">${result.signName}</div>
+      </div>
+    `;
+    cards.appendChild(card);
+  });
+
+  document.getElementById('results').classList.add('show');
+  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showError(msg) {
+  const err = document.getElementById('errorMsg');
+  err.textContent = msg;
+  err.style.display = 'block';
+}
+</script>
+</body>
+</html>
