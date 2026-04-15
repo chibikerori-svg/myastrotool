@@ -463,6 +463,55 @@ const LOTS = [
     calc: (p, asc, diurnal) => mod360(asc + 18 - p.sun),
     formula: () => "ASC + ♈19° − ☉"
   },
+  {
+    id: "disc", name: "Discord / Heth", ja: "ヘス（緊張の生命力）",
+    keyword: "火と水のせめぎ合い・守るための戦い",
+    color: "#a06040",
+    calc: (p, asc, diurnal) => mod360(asc + p.jup - p.mar),
+    formula: () => "ASC + ♃ − ♂"
+  },
+  {
+    id: "intel", name: "Intelligence", ja: "インテリジェンス（レーシュ）",
+    keyword: "感情をどう翻訳して外に出すか",
+    color: "#70a878",
+    calc: (p, asc, diurnal) => mod360(asc + p.mer - p.moon),
+    formula: () => "ASC + ☿ − ☽"
+  },
+  {
+    id: "skill", name: "Skill", ja: "スキル（メム）",
+    keyword: "思考を行動に変える・技術の習得",
+    color: "#60a090",
+    calc: (p, asc, diurnal) => mod360(asc + p.mer - p.mar),
+    formula: () => "ASC + ☿ − ♂"
+  },
+  {
+    id: "mind", name: "Mind", ja: "マインド（アイン）",
+    keyword: "自我と思考のズレ・一致",
+    color: "#8878a0",
+    calc: (p, asc, diurnal) => mod360(asc + p.mer - p.sun),
+    formula: () => "ASC + ☿ − ☉"
+  },
+  {
+    id: "comm", name: "Communication", ja: "コミュニケーション（ぺー）",
+    keyword: "どう言えば届くか・言語的な魅力",
+    color: "#a07890",
+    calc: (p, asc, diurnal) => mod360(asc + p.mer - p.ven),
+    formula: () => "ASC + ☿ − ♀"
+  },
+  {
+    id: "joy", name: "Joy", ja: "ジョイ（カフ）",
+    keyword: "ちょうどいいサイズの喜び",
+    color: "#a09040",
+    calc: (p, asc, diurnal) => mod360(asc + p.ven - p.jup),
+    formula: () => "ASC + ♀ − ♃"
+  },
+  {
+    id: "lux", name: "Luxury", ja: "ラグジュアリー（カフ）",
+    keyword: "好きがどんどん膨らむ・豊かさの享受",
+    color: "#c890a0",
+    calc: (p, asc, diurnal) => mod360(asc + p.jup - p.ven),
+    formula: () => "ASC + ♃ − ♀"
+  },
 ];
 
 function mod360(deg) {
