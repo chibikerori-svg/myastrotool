@@ -319,6 +319,81 @@
     .planet-grid { grid-template-columns: 1fr; }
     header h1 { font-size: 1.6rem; }
   }
+
+  .save-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+  }
+  .save-input {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(184,147,90,0.25);
+    border-radius: 3px;
+    color: var(--cream);
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+  }
+  .save-input:focus { outline: none; border-color: var(--gold); }
+  .save-btn {
+    background: rgba(184,147,90,0.2);
+    border: 1px solid rgba(184,147,90,0.4);
+    border-radius: 3px;
+    color: var(--gold-light);
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .save-btn:hover { background: rgba(184,147,90,0.35); }
+  .saved-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.8rem;
+    min-height: 0.5rem;
+  }
+  .saved-tag {
+    background: rgba(74,53,128,0.4);
+    border: 1px solid rgba(123,104,174,0.4);
+    border-radius: 20px;
+    color: var(--cream);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.7rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: border-color 0.2s;
+  }
+  .saved-tag:hover { border-color: var(--gold); }
+  .saved-tag .del-btn {
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 0 0.1rem;
+  }
+  .saved-tag .del-btn:hover { color: #e07070; }
+  .export-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .export-btn {
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(184,147,90,0.2);
+    border-radius: 3px;
+    color: var(--purple-light);
+    font-family: "Noto Serif JP", serif;
+    font-size: 0.75rem;
+    padding: 0.4rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .export-btn:hover { border-color: rgba(184,147,90,0.4); color: var(--cream); }
+  .import-label { cursor: pointer; }
 </style>
 </head>
 <body>
@@ -358,7 +433,20 @@
     </div>
   </div>
 
-  <div class="error-msg" id="errorMsg">入力を確認してください</div>
+  <div class="input-section">
+    <div class="section-title">データ保存・読み込み</div>
+    <div class="save-row">
+      <input type="text" id="saveName" placeholder="名前（例：けいこ、お客様A）" class="save-input">
+      <button class="save-btn" onclick="saveData()">保存</button>
+    </div>
+    <div id="savedList" class="saved-list"></div>
+    <div class="export-row">
+      <button class="export-btn" onclick="exportData()">JSONエクスポート</button>
+      <label class="export-btn import-label">JSONインポート<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
+    </div>
+  </div>
+
+    <div class="error-msg" id="errorMsg">入力を確認してください</div>
   <button class="calc-btn" onclick="calculate()">計　算</button>
 
   <div class="divider"></div>
@@ -660,6 +748,105 @@ function showError(msg) {
   err.textContent = msg;
   err.style.display = 'block';
 }
+
+// Save/Load functionality
+const STORAGE_KEY = 'arabic_lots_charts';
+
+function getCharts() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+
+function setCharts(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getCurrentInputs() {
+  const data = { time: document.getElementById('birthTime').value };
+  PLANETS.forEach(p => {
+    data[p.id + '_deg'] = document.getElementById(p.id + '_deg').value;
+    data[p.id + '_min'] = document.getElementById(p.id + '_min').value;
+    data[p.id + '_sign'] = document.getElementById(p.id + '_sign').value;
+  });
+  data['asc_deg'] = document.getElementById('asc_deg').value;
+  data['asc_min'] = document.getElementById('asc_min').value;
+  data['asc_sign'] = document.getElementById('asc_sign').value;
+  return data;
+}
+
+function loadInputs(data) {
+  if (data.time) document.getElementById('birthTime').value = data.time;
+  PLANETS.forEach(p => {
+    if (data[p.id + '_deg'] !== undefined) document.getElementById(p.id + '_deg').value = data[p.id + '_deg'];
+    if (data[p.id + '_min'] !== undefined) document.getElementById(p.id + '_min').value = data[p.id + '_min'];
+    if (data[p.id + '_sign'] !== undefined) document.getElementById(p.id + '_sign').value = data[p.id + '_sign'];
+  });
+  if (data['asc_deg'] !== undefined) document.getElementById('asc_deg').value = data['asc_deg'];
+  if (data['asc_min'] !== undefined) document.getElementById('asc_min').value = data['asc_min'];
+  if (data['asc_sign'] !== undefined) document.getElementById('asc_sign').value = data['asc_sign'];
+  updateBadge();
+}
+
+function saveData() {
+  const name = document.getElementById('saveName').value.trim();
+  if (!name) { alert('名前を入力してください'); return; }
+  const charts = getCharts();
+  charts[name] = getCurrentInputs();
+  setCharts(charts);
+  document.getElementById('saveName').value = '';
+  renderSavedList();
+}
+
+function loadData(name) {
+  const charts = getCharts();
+  if (charts[name]) loadInputs(charts[name]);
+}
+
+function deleteData(name) {
+  const charts = getCharts();
+  delete charts[name];
+  setCharts(charts);
+  renderSavedList();
+}
+
+function renderSavedList() {
+  const charts = getCharts();
+  const list = document.getElementById('savedList');
+  list.innerHTML = '';
+  Object.keys(charts).forEach(name => {
+    const tag = document.createElement('div');
+    tag.className = 'saved-tag';
+    tag.innerHTML = `<span onclick="loadData('${name.replace(/'/g, "&apos;")}')">${name}</span><span class="del-btn" onclick="deleteData('${name.replace(/'/g, "&apos;")}')">×</span>`;
+    list.appendChild(tag);
+  });
+}
+
+function exportData() {
+  const charts = getCharts();
+  const blob = new Blob([JSON.stringify(charts, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'arabic_lots_charts.json';
+  a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      const charts = getCharts();
+      Object.assign(charts, data);
+      setCharts(charts);
+      renderSavedList();
+      alert('インポートしました');
+    } catch { alert('ファイルの読み込みに失敗しました'); }
+  };
+  reader.readAsText(file);
+}
+
+renderSavedList();
 </script>
 </body>
 </html>
