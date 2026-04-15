@@ -464,11 +464,18 @@ const LOTS = [
     formula: () => "ASC + ♈19° − ☉"
   },
   {
-    id: "disc", name: "Discord / Heth", ja: "ヘス（緊張の生命力）",
-    keyword: "火と水のせめぎ合い・守るための戦い",
-    color: "#a06040",
-    calc: (p, asc, diurnal) => mod360(asc + p.jup - p.mar),
-    formula: () => "ASC + ♃ − ♂"
+    id: "delight", name: "Delight", ja: "ディライト",
+    keyword: "外に出せる心地よさ・好きがそのまま魅力になる",
+    color: "#c8a0b8",
+    calc: (p, asc, diurnal) => mod360(asc + p.ven - p.moon),
+    formula: () => "ASC + ♀ − ☽"
+  },
+  {
+    id: "comfort", name: "Comfort", ja: "コンフォート",
+    keyword: "本当に落ち着ける場所・安心の土台",
+    color: "#a0b8c8",
+    calc: (p, asc, diurnal) => mod360(asc + p.moon - p.ven),
+    formula: () => "ASC + ☽ − ♀"
   },
   {
     id: "intel", name: "Intelligence", ja: "インテリジェンス（レーシュ）",
