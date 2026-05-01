@@ -1,0 +1,246 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;align-items:center;}
+.controls label{font-size:13px;color:var(--color-text-secondary);}
+select,input[type=text]{font-size:13px;padding:4px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);}
+input[type=text]{width:150px;}
+table{width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;}
+th{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-align:left;padding:5px 7px;border-bottom:0.5px solid var(--color-border-tertiary);white-space:nowrap;}
+td{padding:5px 7px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;color:var(--color-text-primary);}
+tr:hover td{background:var(--color-background-secondary);}
+.num{color:var(--color-text-secondary);font-size:11px;}
+.heb{direction:rtl;font-size:14px;}
+.sub{font-size:11px;color:var(--color-text-secondary);}
+.card-badge{display:inline-block;font-size:11px;padding:2px 7px;border-radius:4px;white-space:nowrap;font-weight:500;}
+.fire{background:#FAECE7;color:#712B13;}
+.earth{background:#EAF3DE;color:#27500A;}
+.air{background:#E6F1FB;color:#0C447C;}
+.water{background:#EEEDFE;color:#3C3489;}
+.planet-badge{display:inline-block;font-size:11px;padding:2px 6px;border-radius:4px;background:var(--color-background-secondary);color:var(--color-text-secondary);margin-top:2px;}
+</style>
+
+<div class="wrap">
+<h2 class="sr-only">72天使と小アルカナ対応表</h2>
+<div class="controls">
+  <label>スート：</label>
+  <select id="suitFilter">
+    <option value="">すべて</option>
+    <option value="ワンド">ワンド（火）</option>
+    <option value="ペンタクル">ペンタクル（地）</option>
+    <option value="ソード">ソード（風）</option>
+    <option value="カップ">カップ（水）</option>
+  </select>
+  <label style="margin-left:6px;">検索：</label>
+  <input type="text" id="search" placeholder="天使名・サイン・領域など">
+</div>
+<div style="overflow-x:auto;">
+<table>
+<thead>
+<tr>
+  <th style="width:28px;">#</th>
+  <th style="width:52px;">ヘブライ</th>
+  <th style="width:70px;">神名</th>
+  <th style="width:110px;">天使名</th>
+  <th style="width:110px;">小アルカナ</th>
+  <th style="width:72px;">惑星</th>
+  <th>守護領域</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+</div>
+
+<script>
+const map=[
+  {n:1, suit:"ワンド", card:"2", sign:"牡羊座", planet:"火星"},
+  {n:2, suit:"ワンド", card:"2", sign:"牡羊座", planet:"火星"},
+  {n:3, suit:"ワンド", card:"3", sign:"牡羊座", planet:"太陽"},
+  {n:4, suit:"ワンド", card:"3", sign:"牡羊座", planet:"太陽"},
+  {n:5, suit:"ワンド", card:"4", sign:"牡羊座", planet:"金星"},
+  {n:6, suit:"ワンド", card:"4", sign:"牡羊座", planet:"金星"},
+  {n:7, suit:"ペンタクル", card:"5", sign:"牡牛座", planet:"水星"},
+  {n:8, suit:"ペンタクル", card:"5", sign:"牡牛座", planet:"水星"},
+  {n:9, suit:"ペンタクル", card:"6", sign:"牡牛座", planet:"月"},
+  {n:10, suit:"ペンタクル", card:"6", sign:"牡牛座", planet:"月"},
+  {n:11, suit:"ペンタクル", card:"7", sign:"牡牛座", planet:"土星"},
+  {n:12, suit:"ペンタクル", card:"7", sign:"牡牛座", planet:"土星"},
+  {n:13, suit:"ソード", card:"8", sign:"双子座", planet:"木星"},
+  {n:14, suit:"ソード", card:"8", sign:"双子座", planet:"木星"},
+  {n:15, suit:"ソード", card:"9", sign:"双子座", planet:"火星"},
+  {n:16, suit:"ソード", card:"9", sign:"双子座", planet:"火星"},
+  {n:17, suit:"ソード", card:"10", sign:"双子座", planet:"太陽"},
+  {n:18, suit:"ソード", card:"10", sign:"双子座", planet:"太陽"},
+  {n:19, suit:"カップ", card:"2", sign:"蟹座", planet:"金星"},
+  {n:20, suit:"カップ", card:"2", sign:"蟹座", planet:"金星"},
+  {n:21, suit:"カップ", card:"3", sign:"蟹座", planet:"水星"},
+  {n:22, suit:"カップ", card:"3", sign:"蟹座", planet:"水星"},
+  {n:23, suit:"カップ", card:"4", sign:"蟹座", planet:"月"},
+  {n:24, suit:"カップ", card:"4", sign:"蟹座", planet:"月"},
+  {n:25, suit:"ワンド", card:"5", sign:"獅子座", planet:"土星"},
+  {n:26, suit:"ワンド", card:"5", sign:"獅子座", planet:"土星"},
+  {n:27, suit:"ワンド", card:"6", sign:"獅子座", planet:"木星"},
+  {n:28, suit:"ワンド", card:"6", sign:"獅子座", planet:"木星"},
+  {n:29, suit:"ワンド", card:"7", sign:"獅子座", planet:"火星"},
+  {n:30, suit:"ワンド", card:"7", sign:"獅子座", planet:"火星"},
+  {n:31, suit:"ペンタクル", card:"8", sign:"乙女座", planet:"太陽"},
+  {n:32, suit:"ペンタクル", card:"8", sign:"乙女座", planet:"太陽"},
+  {n:33, suit:"ペンタクル", card:"9", sign:"乙女座", planet:"金星"},
+  {n:34, suit:"ペンタクル", card:"9", sign:"乙女座", planet:"金星"},
+  {n:35, suit:"ペンタクル", card:"10", sign:"乙女座", planet:"水星"},
+  {n:36, suit:"ペンタクル", card:"10", sign:"乙女座", planet:"水星"},
+  {n:37, suit:"ソード", card:"2", sign:"天秤座", planet:"月"},
+  {n:38, suit:"ソード", card:"2", sign:"天秤座", planet:"月"},
+  {n:39, suit:"ソード", card:"3", sign:"天秤座", planet:"土星"},
+  {n:40, suit:"ソード", card:"3", sign:"天秤座", planet:"土星"},
+  {n:41, suit:"ソード", card:"4", sign:"天秤座", planet:"木星"},
+  {n:42, suit:"ソード", card:"4", sign:"天秤座", planet:"木星"},
+  {n:43, suit:"カップ", card:"5", sign:"蠍座", planet:"火星"},
+  {n:44, suit:"カップ", card:"5", sign:"蠍座", planet:"火星"},
+  {n:45, suit:"カップ", card:"6", sign:"蠍座", planet:"太陽"},
+  {n:46, suit:"カップ", card:"6", sign:"蠍座", planet:"太陽"},
+  {n:47, suit:"カップ", card:"7", sign:"蠍座", planet:"金星"},
+  {n:48, suit:"カップ", card:"7", sign:"蠍座", planet:"金星"},
+  {n:49, suit:"ワンド", card:"8", sign:"射手座", planet:"水星"},
+  {n:50, suit:"ワンド", card:"8", sign:"射手座", planet:"水星"},
+  {n:51, suit:"ワンド", card:"9", sign:"射手座", planet:"月"},
+  {n:52, suit:"ワンド", card:"9", sign:"射手座", planet:"月"},
+  {n:53, suit:"ワンド", card:"10", sign:"射手座", planet:"土星"},
+  {n:54, suit:"ワンド", card:"10", sign:"射手座", planet:"土星"},
+  {n:55, suit:"ペンタクル", card:"2", sign:"山羊座", planet:"木星"},
+  {n:56, suit:"ペンタクル", card:"2", sign:"山羊座", planet:"木星"},
+  {n:57, suit:"ペンタクル", card:"3", sign:"山羊座", planet:"火星"},
+  {n:58, suit:"ペンタクル", card:"3", sign:"山羊座", planet:"火星"},
+  {n:59, suit:"ペンタクル", card:"4", sign:"山羊座", planet:"太陽"},
+  {n:60, suit:"ペンタクル", card:"4", sign:"山羊座", planet:"太陽"},
+  {n:61, suit:"ソード", card:"5", sign:"水瓶座", planet:"金星"},
+  {n:62, suit:"ソード", card:"5", sign:"水瓶座", planet:"金星"},
+  {n:63, suit:"ソード", card:"6", sign:"水瓶座", planet:"水星"},
+  {n:64, suit:"ソード", card:"6", sign:"水瓶座", planet:"水星"},
+  {n:65, suit:"ソード", card:"7", sign:"水瓶座", planet:"月"},
+  {n:66, suit:"ソード", card:"7", sign:"水瓶座", planet:"月"},
+  {n:67, suit:"カップ", card:"8", sign:"魚座", planet:"土星"},
+  {n:68, suit:"カップ", card:"8", sign:"魚座", planet:"土星"},
+  {n:69, suit:"カップ", card:"9", sign:"魚座", planet:"木星"},
+  {n:70, suit:"カップ", card:"9", sign:"魚座", planet:"木星"},
+  {n:71, suit:"カップ", card:"10", sign:"魚座", planet:"火星"},
+  {n:72, suit:"カップ", card:"10", sign:"魚座", planet:"火星"},
+];
+
+const angels=[
+  [1,"והו","ヴェフ","Vehuiah","ヴェフイア","意志・始まりの力"],
+  [2,"ילי","イェリ","Jeliel","ジェリエル","愛・忠誠・生殖力"],
+  [3,"סיט","シタ","Sitael","シタエル","建設・試練への耐久"],
+  [4,"עלם","エレム","Elemiah","エレミア","旅・内的変容・発見"],
+  [5,"מהש","マハス","Mahasiah","マハシア","調和・学習・平和"],
+  [6,"ללה","レラ","Lelahel","レラヘル","光・癒し・才能の開花"],
+  [7,"אכא","アカア","Achaiah","アカイア","忍耐・自然法則の理解"],
+  [8,"כהת","カヘト","Cahetel","カヘテル","感謝・神の祝福・農業"],
+  [9,"הזי","ヘジ","Haziel","ハジエル","赦し・慈悲・神の恵み"],
+  [10,"אלד","アラド","Aladiah","アラディア","浄化・カルマの解消"],
+  [11,"לאו","ラウ","Lauviah","ラウヴィア","勝利・啓示・夢のお告げ"],
+  [12,"ההע","ハハア","Hahaiah","ハハイア","庇護・夢の解読"],
+  [13,"יזל","イェゼル","Jezalel","ジェザレル","記憶・誠実さ・和解"],
+  [14,"מבה","メベ","Mebahel","メバヘル","正義・真実・解放"],
+  [15,"הרי","ハリ","Hariel","ハリエル","信仰の浄化・動物の守護"],
+  [16,"הקמ","ハケム","Hekamiah","ヘカミア","忠誠・リーダーシップ"],
+  [17,"לאו","ラウ②","Lauviah②","ラウヴィア②","知恵・高次の啓示"],
+  [18,"כלי","カリ","Caliel","カリエル","正義の勝利・法廷"],
+  [19,"לוו","レウ","Leuviah","レウヴィア","記憶・豊穣・許し"],
+  [20,"פהל","パハル","Pahaliah","パハリア","変容・道徳・宗教"],
+  [21,"נלך","ネルク","Nelkhael","ネルカエル","学習・魔術除去・詩"],
+  [22,"ייי","イェイ","Yeiayel","イェイアイエル","運命・名声・予言"],
+  [23,"מלה","メレ","Melahel","メラヘル","癒し・自然・薬草"],
+  [24,"חהו","ハフ","Haheuiah","ハヘウイア","庇護・亡命・真実"],
+  [25,"נתה","ニト","Nith-Haiah","ニト・ハイア","魔法・叡智・秘教"],
+  [26,"האא","ハア","Haaiah","ハアイア","政治・外交・秘密"],
+  [27,"ירת","イェレト","Yeratel","イェラテル","伝播・文明の守護"],
+  [28,"שאה","シャア","Seheiah","セヘイア","長寿・健康・危険除去"],
+  [29,"ריי","レイ","Reyiel","レイエル","解放・信仰・瞑想"],
+  [30,"אום","オム","Omael","オマエル","忍耐・多様性・動物"],
+  [31,"לכב","レカブ","Lecabel","レカベル","知識・植物・農業"],
+  [32,"ושר","ヴァシル","Vasariah","ヴァサリア","正義・謙虚・法律"],
+  [33,"יחו","イェフ","Yehuiah","イェフイア","上位への服従・保護"],
+  [34,"להח","レハフ","Lehahiah","レハヒア","秩序・献身・平和"],
+  [35,"כוק","カヴァク","Chavakiah","チャヴァキア","和解・家族の絆"],
+  [36,"מנד","メナド","Menadel","メナデル","仕事・記憶・故郷"],
+  [37,"אני","アニ","Aniel","アニエル","突破口・啓示・科学"],
+  [38,"חעמ","ハアム","Haamiah","ハアミア","儀式・真理探求・礼節"],
+  [39,"רהע","ラハ","Rehael","レハエル","治癒・親子関係・服従"],
+  [40,"ייז","イェイズ","Ieiazel","イェイアゼル","解放・芸術・印刷"],
+  [41,"ההה","ヘヘヘ","Hahahel","ハハヘル","使命・霊的覚醒・修道"],
+  [42,"מיכ","ミク","Mikael","ミカエル","秩序・政治的守護・旅"],
+  [43,"וול","ヴェヴァル","Vevaliah","ヴェヴァリア","権力・平和・繁栄"],
+  [44,"ילה","イェレ","Yelahiah","イェラヒア","戦士・カルマの正義"],
+  [45,"סאל","サエル","Sealiah","セアリア","意志・動機・真実"],
+  [46,"עריאל","アリエル","Ariel","アリエル","知覚・発見・夢"],
+  [47,"עשל","アシュル","Asaliah","アサリア","観想・正義・真理"],
+  [48,"מיה","ミイェ","Mihael","ミハエル","友情・平和・生殖"],
+  [49,"והו","ヴェフ②","Vehuel","ヴェフエル","賛美・偉大さ・高次"],
+  [50,"דני","デニ","Daniel","ダニエル","言葉・慈悲・弁護"],
+  [51,"החש","ハフス","Hahasiah","ハハシア","錬金術・秘教・医療"],
+  [52,"עממ","アメム","Imamaiah","イママイア","変容・力・試練克服"],
+  [53,"ננא","ネナ","Nanael","ナナエル","伝統・瞑想・哲学"],
+  [54,"ניתה","ニテ","Nithael","ニタエル","王権・安定・長寿"],
+  [55,"מבה","メベ②","Mebahiah","メバヒア","道徳・子孫・宗教"],
+  [56,"פוי","プイ","Poyel","ポイエル","豊かさ・スター性・謙虚"],
+  [57,"נמם","ネメム","Nemamiah","ネマミア","大義・戦略・解放"],
+  [58,"ייל","イェイル","Yeialel","イェイアレル","鉄・戦士・精神力"],
+  [59,"הרח","ヘラフ","Harachel","ハラヘル","知識・宝・書物"],
+  [60,"מצר","メツェル","Mitzrael","ミツラエル","癒し・誠実・感情"],
+  [61,"ומב","ウマブ","Umabel","ウマベル","友情・感受性・占星術"],
+  [62,"יהה","イェへ","Iah-Hel","イア・ヘル","哲学・孤独・叡智"],
+  [63,"ענו","アヌ","Anauel","アナウエル","統一・ビジネス・保護"],
+  [64,"מחי","メヒ","Mehiel","メヒエル","保護・霊感・著述"],
+  [65,"דמב","デマブ","Damabiah","ダマビア","海・魔術除去・航海"],
+  [66,"מנק","メナク","Manakel","マナケル","夢・植物・水"],
+  [67,"איע","アイェ","Eiael","エイアエル","変化・長寿・錬金術"],
+  [68,"חבו","ハブ","Habuhiah","ハブヒア","癒し・農業・出産"],
+  [69,"ראה","ラア","Rochel","ロケル","発見・遺産・法律"],
+  [70,"יבמ","イェブム","Jabamiah","ジャバミア","錬金術・再生・変容"],
+  [71,"היי","ヘイ","Haiaiel","ハイアイエル","武器・勝利・戦略"],
+  [72,"מומ","ムム","Mumiah","ムミア","終わりと再生・完成"],
+];
+
+const suitClass={ワンド:"fire",ペンタクル:"earth",ソード:"air",カップ:"water"};
+const mapByN={};
+map.forEach(m=>mapByN[m.n]=m);
+
+function render(){
+  const sv=document.getElementById('suitFilter').value;
+  const kw=document.getElementById('search').value.toLowerCase();
+  const tbody=document.getElementById('tbody');
+  tbody.innerHTML='';
+  angels.forEach(([num,heb,yomi,angel,angelKana,domain])=>{
+    const m=mapByN[num];
+    if(!m)return;
+    if(sv&&m.suit!==sv)return;
+    const searchStr=`${num}${yomi}${angel}${angelKana}${domain}${m.suit}${m.card}${m.planet}${m.sign}`.toLowerCase();
+    if(kw&&!searchStr.includes(kw))return;
+    const sc=suitClass[m.suit]||'';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="num">${num}</td>
+      <td class="heb">${heb}</td>
+      <td><span style="font-weight:500;font-size:12px;">${yomi}</span></td>
+      <td>
+        <span style="font-weight:500;font-size:12px;">${angel}</span><br>
+        <span class="sub">${angelKana}</span>
+      </td>
+      <td>
+        <span class="card-badge ${sc}">${m.suit}${m.card}</span><br>
+        <span class="sub">${m.sign}</span>
+      </td>
+      <td><span class="planet-badge">${m.planet}</span></td>
+      <td style="font-size:11px;color:var(--color-text-secondary);">${domain}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+render();
+document.getElementById('suitFilter').addEventListener('change',render);
+document.getElementById('search').addEventListener('input',render);
+</script>
