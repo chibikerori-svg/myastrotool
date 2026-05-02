@@ -40,8 +40,8 @@ tr:hover td{background:var(--color-background-secondary);}
 <thead>
 <tr>
   <th style="width:28px;">#</th>
-  <th style="width:52px;">ヘブライ</th>
-  <th style="width:70px;">神名</th>
+  <th style="width:72px;">ヘブライ</th>
+  <th style="width:60px;">神名</th>
   <th style="width:110px;">天使名</th>
   <th style="width:110px;">小アルカナ</th>
   <th style="width:72px;">惑星</th>
@@ -204,6 +204,20 @@ const angels=[
   [72,"מומ","ムム","Mumiah","ムミア","終わりと再生・完成"],
 ];
 
+// ヘブライ文字→カタカナ読みマップ
+const hebMap={
+  'א':'アレフ','ב':'ベート','ג':'ギメル','ד':'ダレット',
+  'ה':'ヘー','ו':'ヴァヴ','ז':'ザイン','ח':'ヘット',
+  'ט':'テット','י':'ヨッド','כ':'カフ','ך':'カフ(語末)',
+  'ל':'ラメッド','מ':'メム','ם':'メム(語末)','נ':'ヌン',
+  'ן':'ヌン(語末)','ס':'サメフ','ע':'アイン','פ':'ペー',
+  'ף':'ペー(語末)','צ':'ツァディ','ץ':'ツァディ(語末)',
+  'ק':'コフ','ר':'レーシュ','ש':'シン/シン','ת':'タヴ'
+};
+function hebToKana(str){
+  return [...str].map(c=>hebMap[c]||c).join('・');
+}
+
 const suitClass={ワンド:"fire",ペンタクル:"earth",ソード:"air",カップ:"water"};
 const mapByN={};
 map.forEach(m=>mapByN[m.n]=m);
@@ -223,7 +237,7 @@ function render(){
     const tr=document.createElement('tr');
     tr.innerHTML=`
       <td class="num">${num}</td>
-      <td class="heb">${heb}</td>
+      <td class="heb">${heb}<br><span style="direction:ltr;display:block;font-size:10px;color:var(--color-text-secondary);text-align:center;font-family:sans-serif;line-height:1.4;">${hebToKana(heb)}</span></td>
       <td><span style="font-weight:500;font-size:12px;">${yomi}</span></td>
       <td>
         <span style="font-weight:500;font-size:12px;">${angel}</span><br>
