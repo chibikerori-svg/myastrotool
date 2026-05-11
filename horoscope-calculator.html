@@ -648,10 +648,6 @@ window.calculate = async function(){
   const lotsURL = buildLotsURL(pLon, ascLon, timeVal);
   document.getElementById('lotsLinkBtn').href = lotsURL;
 
-  // ── 生命の樹チャート連携URL ──
-  const treeURL = buildTreeURL(pLon, pRx, ascLon, mcLon, hCusps, dateVal, timeVal, aspects);
-  document.getElementById('treeLinkBtn').href = treeURL;
-
   // ── chart info ──
   document.getElementById('chartInfo').innerHTML=`
     <span class="info-pill">ASC <span>${signStr(ascLon)}</span></span>
@@ -719,6 +715,10 @@ window.calculate = async function(){
     `;
     al.appendChild(div);
   }
+
+  // ── 生命の樹チャート連携URL ──
+  const treeURL = buildTreeURL(pLon, pRx, ascLon, mcLon, hCusps, dateVal, timeVal, aspects);
+  document.getElementById('treeLinkBtn').href = treeURL;
 
   // ── Draw natal chart wheel ──
   drawChartWheel(pLon, pRx, hCusps, ascLon, mcLon, aspects);
