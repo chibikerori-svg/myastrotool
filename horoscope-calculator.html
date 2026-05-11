@@ -251,7 +251,7 @@
       </div>
     </div>
 
-    <button class="calc-btn" id="calcBtn" onclick="calculate()" disabled>✦ 計算する ✦</button>
+    <button class="calc-btn" id="calcBtn" disabled>✦ 計算する ✦</button>
     <div id="statusBar">Swiss Ephemeris を初期化中…</div>
     <div class="error-msg" id="errMsg"></div>
   </div>
@@ -279,7 +279,7 @@
         <svg id="chartWheel" viewBox="0 0 560 560" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
       <div class="chart-download-row">
-        <button class="chart-dl-btn" onclick="downloadChart()">✦ SVGとして保存</button>
+        <button class="chart-dl-btn" id="chartDlBtn">✦ SVGとして保存</button>
       </div>
     </div>
 
@@ -483,6 +483,7 @@ async function initSwe(){
     await swe.initSwissEph();
     sweReady = true;
     document.getElementById('calcBtn').disabled = false;
+    document.getElementById('calcBtn').addEventListener('click', calculate);
     sb.style.display = 'none';
     document.getElementById('loadingOverlay').classList.add('hidden');
   } catch(e){
@@ -491,6 +492,12 @@ async function initSwe(){
   }
 }
 initSwe();
+
+// chartDlBtnはDOM読み込み後に登録
+document.addEventListener('DOMContentLoaded', () => {
+  const dlBtn = document.getElementById('chartDlBtn');
+  if(dlBtn) dlBtn.addEventListener('click', downloadChart);
+});
 
 // ── Helpers ──
 function norm(lon){ return ((lon%360)+360)%360; }
@@ -573,7 +580,7 @@ function buildLotsURL(pLon, ascLon, btime) {
 }
 
 // ── Main calculate ──
-window.calculate = async function(){
+async function calculate(){
   if(!sweReady){ alert('初期化待ち…'); return; }
   const err=document.getElementById('errMsg');
   err.classList.remove('show');
@@ -1002,7 +1009,7 @@ function drawChartWheel(pLon, pRx, hCusps, ascLon, mcLon, aspects){
 }
 
 // SVGダウンロード
-window.downloadChart = function(){
+function downloadChart(){
   const svg=document.getElementById('chartWheel');
   const blob=new Blob([svg.outerHTML],{type:'image/svg+xml'});
   const url=URL.createObjectURL(blob);
