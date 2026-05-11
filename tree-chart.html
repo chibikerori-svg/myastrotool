@@ -7,146 +7,84 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #08080f;
-    --gold: #c9a84c;
-    --gold-light: #e8c87a;
-    --text: #e2ddd5;
-    --text-dim: #7a7585;
-    --border: rgba(201,168,76,0.18);
-    --card: rgba(255,255,255,0.025);
-    --purple: #9070d0;
+    --bg:#08080f; --gold:#c9a84c; --gold-l:#e8c87a;
+    --text:#e2ddd5; --dim:#7a7585; --border:rgba(201,168,76,.18);
+    --card:rgba(255,255,255,.025); --purple:#9070d0;
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Serif JP', serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-  body::before {
-    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-    background:
-      radial-gradient(ellipse at 50% 20%, rgba(80,50,140,.15) 0%, transparent 55%),
-      radial-gradient(ellipse at 20% 80%, rgba(40,60,120,.10) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 70%, rgba(80,40,100,.10) 0%, transparent 50%);
-  }
-  .stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
-  .star { position:absolute; background:white; border-radius:50%;
-    animation:twinkle var(--d,3s) ease-in-out infinite alternate; opacity:0; }
-  @keyframes twinkle {
-    from{opacity:var(--min-o,.05);transform:scale(.8);}
-    to  {opacity:var(--max-o,.5); transform:scale(1.1);}
-  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Serif JP',serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse at 50% 20%,rgba(80,50,140,.15) 0%,transparent 55%),
+               radial-gradient(ellipse at 20% 80%,rgba(40,60,120,.10) 0%,transparent 50%),
+               radial-gradient(ellipse at 80% 70%,rgba(80,40,100,.10) 0%,transparent 50%);}
+  .stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  .star{position:absolute;background:white;border-radius:50%;
+    animation:twinkle var(--d,3s) ease-in-out infinite alternate;opacity:0;}
+  @keyframes twinkle{from{opacity:var(--min-o,.05);transform:scale(.8);}to{opacity:var(--max-o,.5);transform:scale(1.1);}}
 
-  .wrap {
-    position:relative; z-index:1;
-    max-width:1100px; margin:0 auto;
-    padding:2.5rem 1.5rem 5rem;
-  }
+  .wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
 
-  header { text-align:center; margin-bottom:2.5rem; }
-  .ornament { font-family:'Cormorant Garamond',serif; color:var(--gold); font-size:1rem;
-    letter-spacing:.3em; opacity:.65; display:block; margin-bottom:.6rem; }
-  h1 { font-family:'Cormorant Garamond',serif; font-weight:300; font-style:italic;
-    font-size:clamp(1.8rem,4vw,2.8rem); color:var(--gold-light); letter-spacing:.06em; margin-bottom:.4rem; }
-  .subtitle { color:var(--text-dim); font-size:.78rem; letter-spacing:.15em; }
-  .divider { display:flex; align-items:center; gap:.8rem; margin:1.2rem auto; max-width:260px; opacity:.4; }
-  .divider::before { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold)); }
-  .divider::after  { content:''; flex:1; height:1px; background:linear-gradient(90deg,var(--gold),transparent); }
-  .divider span { color:var(--gold); font-size:.65rem; }
+  header{text-align:center;margin-bottom:2rem;}
+  .ornament{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:1rem;
+    letter-spacing:.3em;opacity:.65;display:block;margin-bottom:.6rem;}
+  h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
+    font-size:clamp(1.8rem,4vw,2.8rem);color:var(--gold-l);letter-spacing:.06em;margin-bottom:.4rem;}
+  .subtitle{color:var(--dim);font-size:.78rem;letter-spacing:.15em;}
+  .divider{display:flex;align-items:center;gap:.8rem;margin:1.2rem auto;max-width:260px;opacity:.4;}
+  .divider::before{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+  .divider::after {content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
+  .divider span{color:var(--gold);font-size:.65rem;}
 
-  /* chart info bar */
-  .info-bar { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; justify-content:center; }
-  .info-pill { background:rgba(201,168,76,.07); border:1px solid rgba(201,168,76,.18);
-    border-radius:20px; padding:.25rem .8rem; font-size:.68rem; color:var(--gold); letter-spacing:.07em; }
-  .info-pill span { color:var(--text); }
+  .info-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem;justify-content:center;}
+  .info-pill{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.18);
+    border-radius:20px;padding:.25rem .8rem;font-size:.68rem;color:var(--gold);letter-spacing:.07em;}
+  .info-pill span{color:var(--text);}
 
-  /* layout */
-  .chart-layout {
-    display: grid;
-    grid-template-columns: 1fr minmax(300px, 420px);
-    gap: 2rem;
-    align-items: start;
-  }
-  @media(max-width:780px){
-    .chart-layout { grid-template-columns:1fr; }
-  }
+  .chart-layout{display:grid;grid-template-columns:1fr minmax(280px,380px);gap:2rem;align-items:start;}
+  @media(max-width:780px){.chart-layout{grid-template-columns:1fr;}}
 
-  /* SVG wrap */
-  .tree-wrap { display:flex; justify-content:center; }
-  #treeSvg { width:100%; max-width:520px; filter:drop-shadow(0 0 50px rgba(140,100,200,.12)); }
+  .tree-wrap{display:flex;justify-content:center;}
+  #treeSvg{width:100%;max-width:500px;filter:drop-shadow(0 0 50px rgba(140,100,200,.12));}
 
-  /* right panel */
-  .panel { display:flex; flex-direction:column; gap:1.2rem; }
+  .panel{display:flex;flex-direction:column;gap:1.2rem;}
+  .panel-section{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;}
+  .panel-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;
+    color:var(--gold);letter-spacing:.08em;margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
 
-  .panel-section {
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:1.2rem 1.4rem;
-  }
-  .panel-title {
-    font-family:'Cormorant Garamond',serif;
-    font-size:1rem; font-style:italic;
-    color:var(--gold); letter-spacing:.08em;
-    margin-bottom:.9rem;
-    padding-bottom:.5rem;
-    border-bottom:1px solid var(--border);
-  }
+  .planet-list{display:flex;flex-direction:column;gap:.3rem;}
+  .planet-row{display:grid;grid-template-columns:20px 1fr auto auto;gap:.4rem;align-items:center;
+    font-size:.78rem;padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .planet-row:last-child{border-bottom:none;}
+  .p-sym{font-size:.95rem;text-align:center;}
+  .p-name{color:var(--dim);font-size:.68rem;line-height:1.4;}
+  .p-pos{font-family:'Cormorant Garamond',serif;font-size:.88rem;color:var(--text);line-height:1.4;}
+  .p-house{font-size:.62rem;color:var(--purple);background:rgba(144,112,208,.12);
+    border:1px solid rgba(144,112,208,.25);border-radius:4px;padding:0 .32rem;}
+  .p-rx{font-size:.6rem;color:#e8a07a;background:rgba(200,120,80,.1);
+    border:1px solid rgba(200,120,80,.25);border-radius:4px;padding:0 .28rem;}
 
-  /* planet list */
-  .planet-list { display:flex; flex-direction:column; gap:.35rem; }
-  .planet-row {
-    display:grid;
-    grid-template-columns: 22px 1fr auto auto;
-    gap:.4rem;
-    align-items:center;
-    font-size:.78rem;
-    padding:.2rem 0;
-    border-bottom:1px solid rgba(255,255,255,.04);
-  }
-  .planet-row:last-child { border-bottom:none; }
-  .p-sym { font-size:1rem; text-align:center; }
-  .p-name { color:var(--text-dim); font-size:.68rem; letter-spacing:.05em; }
-  .p-pos { font-family:'Cormorant Garamond',serif; font-size:.88rem; color:var(--text); }
-  .p-house { font-size:.65rem; color:var(--purple); background:rgba(144,112,208,.12);
-    border:1px solid rgba(144,112,208,.25); border-radius:4px; padding:0 .35rem; }
-  .p-rx { font-size:.6rem; color:#e8a07a; background:rgba(200,120,80,.1);
-    border:1px solid rgba(200,120,80,.25); border-radius:4px; padding:0 .3rem; margin-left:.2rem; }
+  .corr-table{display:flex;flex-direction:column;gap:.2rem;font-size:.7rem;}
+  .corr-row{display:grid;grid-template-columns:72px 52px 1fr;gap:.3rem;align-items:baseline;
+    padding:.16rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .corr-row:last-child{border-bottom:none;}
+  .c-se{color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;}
+  .c-pl{color:rgba(226,221,213,.75);}
+  .c-kw{color:var(--dim);font-size:.63rem;}
 
-  /* aspect list */
-  .aspect-list { display:flex; flex-direction:column; gap:.3rem; }
-  .asp-row { display:flex; align-items:center; gap:.5rem; font-size:.73rem; }
-  .asp-sym { font-size:.9rem; min-width:16px; }
-  .asp-planets { flex:1; color:var(--text-dim); }
-  .asp-orb { color:rgba(255,255,255,.3); font-size:.65rem; }
+  .dl-row{display:flex;gap:.6rem;margin-top:.5rem;flex-wrap:wrap;}
+  .dl-btn{background:rgba(201,168,76,.07);border:1px solid var(--border);border-radius:8px;
+    color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:.82rem;font-style:italic;
+    padding:.4rem .9rem;cursor:pointer;letter-spacing:.07em;transition:all .3s;}
+  .dl-btn:hover{background:rgba(201,168,76,.14);border-color:var(--gold);}
 
-  /* download */
-  .dl-row { display:flex; gap:.6rem; margin-top:.5rem; flex-wrap:wrap; }
-  .dl-btn {
-    background:rgba(201,168,76,.07); border:1px solid var(--border);
-    border-radius:8px; color:var(--gold);
-    font-family:'Cormorant Garamond',serif; font-size:.82rem; font-style:italic;
-    padding:.4rem .9rem; cursor:pointer; letter-spacing:.07em; transition:all .3s;
-  }
-  .dl-btn:hover { background:rgba(201,168,76,.14); border-color:var(--gold); }
+  .no-data{text-align:center;padding:4rem 2rem;color:var(--dim);
+    font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;}
 
-  /* no data */
-  .no-data {
-    text-align:center; padding:4rem 2rem;
-    color:var(--text-dim); font-family:'Cormorant Garamond',serif;
-    font-size:1.1rem; font-style:italic;
-  }
-
-  footer { text-align:center; margin-top:3rem; color:var(--text-dim); font-size:.68rem;
-    letter-spacing:.1em; opacity:.4; }
+  footer{text-align:center;margin-top:3rem;color:var(--dim);font-size:.68rem;letter-spacing:.1em;opacity:.4;}
 </style>
 </head>
 <body>
-
 <div class="stars" id="stars"></div>
-
 <div class="wrap">
   <header>
     <span class="ornament">✦ AWAI KEIKO ✦</span>
@@ -159,19 +97,18 @@
 
   <div id="mainContent">
     <div class="no-data" id="noData">
-      ホロスコープ計算機から「生命の樹チャートへ送る」ボタンで開いてください。<br>
-      <small style="font-size:.8rem;color:var(--text-dim);font-style:normal;">または URLパラメータで惑星データを渡してください。</small>
+      ホロスコープ計算機から「生命の樹チャートへ送る」で開いてください。
     </div>
     <div class="chart-layout" id="chartLayout" style="display:none;">
       <div class="tree-wrap">
-        <svg id="treeSvg" viewBox="0 0 520 820" xmlns="http://www.w3.org/2000/svg"></svg>
+        <svg id="treeSvg" viewBox="0 0 520 860" xmlns="http://www.w3.org/2000/svg"></svg>
       </div>
       <div class="panel" id="sidePanel"></div>
     </div>
   </div>
 
   <div class="dl-row" id="dlRow" style="justify-content:center;display:none;">
-    <button class="dl-btn" onclick="downloadSVG()">✦ SVGとして保存</button>
+    <button class="dl-btn" id="dlSvgBtn">✦ SVGとして保存</button>
     <button class="dl-btn" onclick="window.print()">✦ 印刷</button>
   </div>
 
@@ -194,38 +131,37 @@
 const SIGNS    = ['牡羊座','牡牛座','双子座','蟹座','獅子座','乙女座','天秤座','蠍座','射手座','山羊座','水瓶座','魚座'];
 const SIGN_SYM = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
 
+// けいこさんの対応
+// seKey: セフィラのキー（SEPHIROT のキー）
 const PLANET_META = {
-  saturn:  {name:'土星',   sym:'♄', col:'#a09070', sephira:'Keter',    seNum:1},
-  uranus:  {name:'天王星', sym:'⛢', col:'#80c8e8', sephira:'Chokmah',  seNum:2},
-  neptune: {name:'海王星', sym:'♆', col:'#7080e8', sephira:'Binah',    seNum:3},
-  // Da'at は惑星なし（隠れたセフィラ）
-  jupiter: {name:'木星',   sym:'♃', col:'#d4b870', sephira:'Chesed',   seNum:4},
-  mars:    {name:'火星',   sym:'♂', col:'#e88080', sephira:'Gevurah',  seNum:5},
-  sun:     {name:'太陽',   sym:'☉', col:'#e8c87a', sephira:'Tiferet',  seNum:6},
-  venus:   {name:'金星',   sym:'♀', col:'#e8b0c8', sephira:'Netzach',  seNum:7},
-  mercury: {name:'水星',   sym:'☿', col:'#a8c4a0', sephira:'Hod',      seNum:8},
-  moon:    {name:'月',     sym:'☽', col:'#b8d4f0', sephira:'Yesod',    seNum:9},
-  pluto:   {name:'冥王星', sym:'♇', col:'#c080c8', sephira:'Malkuth',  seNum:10},
+  pluto:   {name:'冥王星', sym:'♇', col:'#c080c8', seKey:1,      sephira:'Keter',    heb:'כֶּתֶר'},
+  neptune: {name:'海王星', sym:'♆', col:'#7080e8', seKey:2,      sephira:'Chokmah',  heb:'חׇכְמָה'},
+  uranus:  {name:'天王星', sym:'⛢', col:'#80c8e8', seKey:3,      sephira:'Binah',    heb:'בִּינָה'},
+  saturn:  {name:'土星',   sym:'♄', col:'#b0a080', seKey:'daat', sephira:"Da'at",    heb:'דַּעַת'},
+  jupiter: {name:'木星',   sym:'♃', col:'#d4b870', seKey:4,      sephira:'Chesed',   heb:'חֶסֶד'},
+  mars:    {name:'火星',   sym:'♂', col:'#e88080', seKey:5,      sephira:'Gevurah',  heb:'גְּבוּרָה'},
+  sun:     {name:'太陽',   sym:'☉', col:'#e8c87a', seKey:6,      sephira:'Tiferet',  heb:'תִּפְאֶרֶת'},
+  venus:   {name:'金星',   sym:'♀', col:'#e8b0c8', seKey:7,      sephira:'Netzach',  heb:'נֶצַח'},
+  mercury: {name:'水星',   sym:'☿', col:'#a8c4a0', seKey:8,      sephira:'Hod',      heb:'הוֹד'},
+  moon:    {name:'月',     sym:'☽', col:'#b8d4f0', seKey:9,      sephira:'Yesod',    heb:'יְסוֹד'},
+  earth:   {name:'地球',   sym:'⊕', col:'#78a060', seKey:10,     sephira:'Malkuth',  heb:'מַלְכוּת'},
 };
 
-// セフィラ座標（SVG 520×820）
-const CX = 260; // 中心X
+const CX = 260;
 const SEPHIROT = {
-  1:  {x:CX,      y:72,  name:'Keter',   heb:'כֶּתֶר',   col:'#d8d8e8', pillar:'middle'},
-  2:  {x:CX+118,  y:160, name:'Chokmah', heb:'חׇכְמָה', col:'#80c8e8', pillar:'right'},
-  3:  {x:CX-118,  y:160, name:'Binah',   heb:'בִּינָה',   col:'#7080e8', pillar:'left'},
-  // Da'at (隠れた) = 4番スロット扱い
-  daat:{x:CX,     y:248, name:"Da'at",   heb:'דַּעַת',   col:'#888898', pillar:'middle', hidden:true},
-  4:  {x:CX+118,  y:336, name:'Chesed',  heb:'חֶסֶד',   col:'#d4b870', pillar:'right'},
-  5:  {x:CX-118,  y:336, name:'Gevurah', heb:'גְּבוּרָה', col:'#e88080', pillar:'left'},
-  6:  {x:CX,      y:424, name:'Tiferet', heb:'תִּפְאֶרֶת', col:'#e8c87a', pillar:'middle'},
-  7:  {x:CX+118,  y:536, name:'Netzach', heb:'נֶצַח',   col:'#e8b0c8', pillar:'right'},
-  8:  {x:CX-118,  y:536, name:'Hod',     heb:'הוֹד',    col:'#a8c4a0', pillar:'left'},
-  9:  {x:CX,      y:648, name:'Yesod',   heb:'יְסוֹד',   col:'#b8d4f0', pillar:'middle'},
-  10: {x:CX,      y:760, name:'Malkuth', heb:'מַלְכוּת', col:'#c080c8', pillar:'middle'},
+  1:    {x:CX,     y:72,  name:'Keter',   heb:'כֶּתֶר',    col:'#d8d8e8', pillar:'middle'},
+  2:    {x:CX+118, y:162, name:'Chokmah', heb:'חׇכְמָה',  col:'#7080e8', pillar:'right'},
+  3:    {x:CX-118, y:162, name:'Binah',   heb:'בִּינָה',    col:'#80c8e8', pillar:'left'},
+  daat: {x:CX,     y:252, name:"Da'at",  heb:'דַּעַת',    col:'#b0a080', pillar:'middle', isDaat:true},
+  4:    {x:CX+118, y:342, name:'Chesed',  heb:'חֶסֶד',    col:'#d4b870', pillar:'right'},
+  5:    {x:CX-118, y:342, name:'Gevurah', heb:'גְּבוּרָה',  col:'#e88080', pillar:'left'},
+  6:    {x:CX,     y:432, name:'Tiferet', heb:'תִּפְאֶרֶת', col:'#e8c87a', pillar:'middle'},
+  7:    {x:CX+118, y:546, name:'Netzach', heb:'נֶצַח',    col:'#e8b0c8', pillar:'right'},
+  8:    {x:CX-118, y:546, name:'Hod',     heb:'הוֹד',     col:'#a8c4a0', pillar:'left'},
+  9:    {x:CX,     y:660, name:'Yesod',   heb:'יְסוֹד',    col:'#b8d4f0', pillar:'middle'},
+  10:   {x:CX,     y:774, name:'Malkuth', heb:'מַלְכוּת',  col:'#78a060', pillar:'middle'},
 };
 
-// パス（接続）
 const PATHS = [
   [1,2],[1,3],[2,3],
   [1,'daat'],
@@ -240,23 +176,10 @@ const PATHS = [
   [9,10],
 ];
 
-// アスペクト定義
-const ASPECTS = [
-  {name:'合',  sym:'☌', angle:0,   orb:8, col:'rgba(232,200,122,0.65)'},
-  {name:'対',  sym:'☍', angle:180, orb:8, col:'rgba(232,122,122,0.6)'},
-  {name:'三角',sym:'△', angle:120, orb:8, col:'rgba(122,232,160,0.6)'},
-  {name:'四角',sym:'□', angle:90,  orb:7, col:'rgba(232,160,122,0.55)'},
-  {name:'六角',sym:'⚹', angle:60,  orb:6, col:'rgba(122,174,232,0.55)'},
-  {name:'半六角',sym:'∠',angle:30, orb:2, col:'rgba(200,180,120,0.4)'},
-];
-const ASP_TEXT_COL = {
-  '☌':'#e8c87a','☍':'#e87a7a','△':'#7ae8a0','□':'#e8a07a','⚹':'#7aaee8','∠':'#c8b870'
-};
-
 // ── Helpers ──
-function norm(lon){ return ((lon%360)+360)%360; }
+function norm(lon){ return ((+lon%360)+360)%360; }
 function lonToSign(lon){
-  const n=norm(parseFloat(lon));
+  const n=norm(lon);
   return {sign:Math.floor(n/30), deg:n%30};
 }
 function formatDeg(d){
@@ -270,22 +193,10 @@ function signStr(lon){
 function whichHouse(lon, cusps){
   for(let h=1;h<=12;h++){
     const c1=norm(cusps[h]||0), c2=norm(cusps[h%12+1]||0);
-    const span=(c2-c1+360)%360, from=(norm(parseFloat(lon))-c1+360)%360;
+    const span=(c2-c1+360)%360, from=(norm(lon)-c1+360)%360;
     if(from<span) return h;
   }
   return 1;
-}
-function findAspects(pLon){
-  const keys=Object.keys(pLon), list=[];
-  for(let i=0;i<keys.length;i++) for(let j=i+1;j<keys.length;j++){
-    const diff=norm(pLon[keys[i]]-pLon[keys[j]]);
-    const ang=diff>180?360-diff:diff;
-    for(const asp of ASPECTS){
-      const orb=Math.abs(ang-asp.angle);
-      if(orb<=asp.orb){ list.push({p1:keys[i],p2:keys[j],asp,orb}); break; }
-    }
-  }
-  return list.sort((a,b)=>a.orb-b.orb);
 }
 
 // ── SVG helper ──
@@ -294,215 +205,179 @@ function el(tag, attrs={}){
   for(const[k,v] of Object.entries(attrs)) e.setAttribute(k,v);
   return e;
 }
-function txt(content, attrs={}){
-  const e=el('text',attrs);
-  e.textContent=content;
-  return e;
+function svgTxt(content, attrs={}){
+  const e=el('text',attrs); e.textContent=content; return e;
 }
 
 // ── Draw Tree ──
-function drawTree(pLon, pRx, ascLon, mcLon, hCusps, aspects){
+function drawTree(pLon, pRx, ascLon, mcLon, hCusps){
   const svg=document.getElementById('treeSvg');
   svg.innerHTML='';
 
+  // defs
   const defs=el('defs');
-  // 背景グラデ
-  const rg=el('radialGradient',{id:'treeBg',cx:'50%',cy:'40%',r:'60%'});
-  const s1=el('stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color','#141428');
-  const s2=el('stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','#060610');
-  rg.appendChild(s1); rg.appendChild(s2);
-  defs.appendChild(rg);
-
-  // pillar gradients
-  ['right','middle','left'].forEach((p,i)=>{
-    const lg=el('linearGradient',{id:`pillar_${p}`,x1:'0',y1:'0',x2:'0',y2:'1'});
-    const cols={right:'rgba(80,160,200,0.06)',middle:'rgba(201,168,76,0.06)',left:'rgba(100,80,200,0.06)'};
-    const sa=el('stop'); sa.setAttribute('offset','0%'); sa.setAttribute('stop-color',cols[p]);
-    const sb=el('stop'); sb.setAttribute('offset','100%'); sb.setAttribute('stop-color','transparent');
-    lg.appendChild(sa); lg.appendChild(sb);
-    defs.appendChild(lg);
-  });
+  const rg=el('radialGradient',{id:'bg',cx:'50%',cy:'35%',r:'65%'});
+  const rs=el('stop'); rs.setAttribute('offset','0%'); rs.setAttribute('stop-color','#141428');
+  const re=el('stop'); re.setAttribute('offset','100%'); re.setAttribute('stop-color','#060610');
+  rg.appendChild(rs); rg.appendChild(re); defs.appendChild(rg);
   svg.appendChild(defs);
 
   // 背景
-  svg.appendChild(el('rect',{width:'520',height:'820',fill:'url(#treeBg)'}));
+  svg.appendChild(el('rect',{width:'520',height:'860',fill:'url(#bg)'}));
 
-  // 三柱の背景帯
-  const pillars=[
-    {x:CX+55,  w:100, id:'right'},
-    {x:CX-50,  w:100, id:'middle'},
-    {x:CX-155, w:100, id:'left'},
+  // 三柱の薄い背景帯
+  const pillarDefs=[
+    {x:CX+50,  w:116, col:'rgba(80,160,200,.05)',  label:'慈悲の柱', lx:CX+108},
+    {x:CX-50,  w:100, col:'rgba(201,168,76,.05)',   label:'中央の柱', lx:CX},
+    {x:CX-166, w:116, col:'rgba(100,80,200,.05)',   label:'峻厳の柱', lx:CX-108},
   ];
-  pillars.forEach(p=>{
-    svg.appendChild(el('rect',{x:p.x,y:50,width:p.w,height:740,
-      fill:`url(#pillar_${p.id})`, rx:'4'}));
+  pillarDefs.forEach(p=>{
+    svg.appendChild(el('rect',{x:p.x,y:55,width:p.w,height:755,rx:4,fill:p.col}));
+    svg.appendChild(svgTxt(p.label,{x:p.lx,y:44,'text-anchor':'middle',
+      'font-size':'8.5','fill':'rgba(201,168,76,.35)','font-family':'Noto Serif JP, serif'}));
   });
 
-  // 柱ラベル
-  svg.appendChild(txt('慈悲の柱',{x:CX+105,y:38,'text-anchor':'middle',
-    'font-size':'9','fill':'rgba(80,160,200,0.45)','font-family':'Noto Serif JP, serif'}));
-  svg.appendChild(txt('中央の柱',{x:CX,y:38,'text-anchor':'middle',
-    'font-size':'9','fill':'rgba(201,168,76,0.45)','font-family':'Noto Serif JP, serif'}));
-  svg.appendChild(txt('峻厳の柱',{x:CX-105,y:38,'text-anchor':'middle',
-    'font-size':'9','fill':'rgba(100,80,200,0.45)','font-family':'Noto Serif JP, serif'}));
-
-  // ── アスペクトライン（セフィラ間） ──
-  // 惑星ID → セフィラ番号マップ
-  const pToSe={};
-  for(const[id,meta] of Object.entries(PLANET_META)){
-    pToSe[id]=meta.seNum;
-  }
-
-  aspects.slice(0,14).forEach(asp=>{
-    const se1=pToSe[asp.p1], se2=pToSe[asp.p2];
-    if(!se1||!se2) return;
-    const n1=SEPHIROT[se1], n2=SEPHIROT[se2];
-    if(!n1||!n2) return;
-    svg.appendChild(el('line',{
-      x1:n1.x,y1:n1.y,x2:n2.x,y2:n2.y,
-      stroke:asp.asp.col,'stroke-width':'1.4',opacity:'0.8'
-    }));
-  });
-
-  // ── パス（生命の樹の構造線） ──
+  // パス線（生命の樹構造）
   PATHS.forEach(([a,b])=>{
     const na=SEPHIROT[a], nb=SEPHIROT[b];
     if(!na||!nb) return;
-    const isDaat=(a==='daat'||b==='daat');
+    const isDaatPath=(a==='daat'||b==='daat');
     svg.appendChild(el('line',{
       x1:na.x,y1:na.y,x2:nb.x,y2:nb.y,
-      stroke: isDaat?'rgba(136,136,152,0.35)':'rgba(201,168,76,0.22)',
-      'stroke-width': isDaat?'0.7':'0.9',
-      'stroke-dasharray': isDaat?'5,4':''
+      stroke: isDaatPath?'rgba(176,160,128,.3)':'rgba(201,168,76,.2)',
+      'stroke-width': isDaatPath?'0.8':'1',
+      'stroke-dasharray': isDaatPath?'5,4':'',
     }));
   });
 
-  // ── セフィラノード ──
+  // セフィラノード
   Object.entries(SEPHIROT).forEach(([key,se])=>{
-    const isNum=!isNaN(parseInt(key));
-    const seNum=isNum?parseInt(key):null;
-    const isDaat=(key==='daat');
+    const isDaat = se.isDaat===true;
+    const seNumKey = isNaN(+key) ? key : +key;
 
-    // 対応惑星を探す
-    let planetId=null, planetMeta=null;
-    if(isNum){
-      for(const[id,m] of Object.entries(PLANET_META)){
-        if(m.seNum===seNum){ planetId=id; planetMeta=m; break; }
-      }
+    // このセフィラに対応する惑星を探す
+    let pid=null, pm=null;
+    for(const[id,m] of Object.entries(PLANET_META)){
+      if(m.seKey===seNumKey){ pid=id; pm=m; break; }
     }
 
-    const lon=planetId?pLon[planetId]:null;
-    const rx= planetId?pRx[planetId]:false;
-    const house=lon!==null?whichHouse(lon,hCusps):null;
+    const lon = pid ? pLon[pid] : null;
+    const rx  = pid ? (pRx[pid]||false) : false;
+    const house = (lon!==null&&lon!==undefined) ? whichHouse(lon,hCusps) : null;
 
-    // 半径
-    const r = seNum===6 ? 34 : isDaat ? 16 : 27;
+    const isTiferet = (seNumKey===6);
+    const r = isTiferet ? 34 : isDaat ? 20 : 27;
 
-    // ノード背景
+    // ノード描画
     if(isDaat){
+      // ダアト：少し大きめにしっかり表示
+      svg.appendChild(el('circle',{cx:se.x,cy:se.y,r:r+5,
+        fill:'none',stroke:'rgba(176,160,128,.15)','stroke-width':'1'}));
       svg.appendChild(el('circle',{cx:se.x,cy:se.y,r:r,
-        fill:'rgba(20,20,40,0.7)',
-        stroke:'rgba(136,136,152,0.4)','stroke-width':'0.8','stroke-dasharray':'4,3'}));
+        fill:'rgba(15,15,28,.9)',stroke:'rgba(176,160,128,.55)','stroke-width':'1',
+        'stroke-dasharray':'5,3'}));
     } else {
       // 外グロー
-      svg.appendChild(el('circle',{cx:se.x,cy:se.y,r:r+6,
-        fill:'none',stroke:se.col,'stroke-width':'0.5',opacity:'0.18'}));
+      svg.appendChild(el('circle',{cx:se.x,cy:se.y,r:r+7,
+        fill:'none',stroke:se.col,'stroke-width':'0.6',opacity:'0.15'}));
+      // ノード本体
       svg.appendChild(el('circle',{cx:se.x,cy:se.y,r:r,
-        fill:'rgba(8,8,15,0.85)',stroke:se.col,'stroke-width': seNum===6?'1.8':'1.2'}));
+        fill:'rgba(8,8,18,.88)',
+        stroke:se.col,'stroke-width': isTiferet?'2':'1.3'}));
     }
 
-    // セフィラ番号
-    if(isNum){
-      svg.appendChild(txt(seNum,{
-        x:se.x-(r-4),y:se.y-(r-5),
-        'text-anchor':'middle','dominant-baseline':'auto',
-        'font-size':'8','fill':isDaat?'rgba(136,136,152,0.5)':se.col,'opacity':'0.5',
-        'font-family':'Cormorant Garamond, serif'
+    // セフィラ番号（左上小さく）
+    if(!isDaat){
+      const numX = se.x - r + 5;
+      const numY = se.y - r + 8;
+      svg.appendChild(svgTxt(seNumKey,{
+        x:numX,y:numY,'text-anchor':'middle','dominant-baseline':'middle',
+        'font-size':'7.5','fill':se.col,'opacity':'0.45',
+        'font-family':'Cormorant Garamond, serif',
       }));
     }
 
-    // 惑星記号
-    if(planetMeta){
-      svg.appendChild(txt(planetMeta.sym,{
-        x:se.x,y:se.y-(seNum===6?5:3),
+    // 惑星記号（ノード中央上寄り）
+    if(pm){
+      svg.appendChild(svgTxt(pm.sym,{
+        x:se.x,y:se.y-(isTiferet?6:3),
         'text-anchor':'middle','dominant-baseline':'middle',
-        'font-size': seNum===6?'20':'15','fill':se.col,'font-weight':'normal'
+        'font-size': isTiferet?'20':isDaat?'16':'15',
+        'fill': isDaat?'rgba(176,160,128,.9)':se.col,
       }));
-      // Rx
+      // 逆行マーク
       if(rx){
-        svg.appendChild(txt('℞',{
-          x:se.x+r-5,y:se.y-r+8,
-          'text-anchor':'middle','dominant-baseline':'middle',
-          'font-size':'7','fill':'#e8a07a'
+        svg.appendChild(svgTxt('℞',{
+          x:se.x+r-4,y:se.y-r+7,'text-anchor':'middle','dominant-baseline':'middle',
+          'font-size':'7','fill':'#e8a07a',
         }));
       }
-    } else if(isDaat){
-      svg.appendChild(txt('✦',{
-        x:se.x,y:se.y,
-        'text-anchor':'middle','dominant-baseline':'middle',
-        'font-size':'10','fill':'rgba(136,136,152,0.5)'
+    }
+
+    // ── ノード下のラベル群 ──
+    const baseY = se.y + r;
+
+    // セフィラ名（英語）
+    svg.appendChild(svgTxt(se.name,{
+      x:se.x,y:baseY+12,'text-anchor':'middle',
+      'font-size':'9','fill': isDaat?'rgba(176,160,128,.7)':se.col,'opacity': isDaat?'1':'0.8',
+      'font-family':'Cormorant Garamond, serif','font-style':'italic',
+    }));
+
+    // ヘブライ文字
+    svg.appendChild(svgTxt(se.heb,{
+      x:se.x,y:baseY+23,'text-anchor':'middle',
+      'font-size':'8','fill':se.col,'opacity':'0.38',
+    }));
+
+    // 惑星名
+    if(pm){
+      svg.appendChild(svgTxt(pm.name,{
+        x:se.x,y:baseY+35,'text-anchor':'middle',
+        'font-size':'8','fill':'rgba(226,221,213,.55)',
       }));
     }
 
-    // セフィラ名（下）
-    if(!isDaat){
-      svg.appendChild(txt(se.name,{
-        x:se.x,y:se.y+r+11,
-        'text-anchor':'middle','font-size':'9',
-        'fill':se.col,'opacity':'0.75',
-        'font-family':'Cormorant Garamond, serif','font-style':'italic'
+    // サイン＋度数
+    if(lon!==null&&lon!==undefined){
+      const{sign,deg}=lonToSign(lon);
+      svg.appendChild(svgTxt(`${SIGN_SYM[sign]} ${formatDeg(deg)}`,{
+        x:se.x,y:baseY+47,'text-anchor':'middle',
+        'font-size':'9.5','fill':'rgba(226,221,213,.8)',
+        'font-family':'Cormorant Garamond, serif',
       }));
-      // ヘブライ文字
-      svg.appendChild(txt(se.heb,{
-        x:se.x,y:se.y+r+22,
-        'text-anchor':'middle','font-size':'8',
-        'fill':se.col,'opacity':'0.4'
-      }));
-    } else {
-      svg.appendChild(txt("Da'at"+'  דַּעַת',{
-        x:se.x,y:se.y+r+12,
-        'text-anchor':'middle','font-size':'8',
-        'fill':'rgba(136,136,152,0.45)',
-        'font-family':'Cormorant Garamond, serif','font-style':'italic'
-      }));
-    }
-
-    // サイン（惑星がある場合）
-    if(lon!==null){
-      const {sign,deg}=lonToSign(lon);
-      svg.appendChild(txt(`${SIGN_SYM[sign]} ${formatDeg(deg)}`,{
-        x:se.x,y:se.y+r+34,
-        'text-anchor':'middle','font-size':'8.5',
-        'fill':'rgba(226,221,213,0.65)'
+      // サイン名
+      svg.appendChild(svgTxt(SIGNS[sign],{
+        x:se.x,y:baseY+59,'text-anchor':'middle',
+        'font-size':'7.5','fill':'rgba(226,221,213,.45)',
       }));
       // ハウス
       if(house){
-        svg.appendChild(txt(`${house}H`,{
-          x:se.x,y:se.y+r+46,
-          'text-anchor':'middle','font-size':'7.5',
-          'fill':'rgba(138,111,200,0.65)'
+        svg.appendChild(svgTxt(`${house}H`,{
+          x:se.x,y:baseY+71,'text-anchor':'middle',
+          'font-size':'7.5','fill':'rgba(138,111,200,.7)',
         }));
       }
     }
   });
 
-  // ASC / MC ラベル（下部）
-  svg.appendChild(txt(`ASC ${signStr(ascLon)}`,{
-    x:30,y:800,'font-size':'9','fill':'rgba(232,200,122,0.6)',
-    'font-family':'Cormorant Garamond, serif','font-style':'italic'
+  // ASC / MC
+  svg.appendChild(svgTxt(`ASC  ${signStr(ascLon)}`,{
+    x:18,y:838,'font-size':'8.5','fill':'rgba(232,200,122,.55)',
+    'font-family':'Cormorant Garamond, serif','font-style':'italic',
   }));
-  svg.appendChild(txt(`MC ${signStr(mcLon)}`,{
-    x:30,y:814,'font-size':'9','fill':'rgba(232,200,122,0.45)',
-    'font-family':'Cormorant Garamond, serif','font-style':'italic'
+  svg.appendChild(svgTxt(`MC   ${signStr(mcLon)}`,{
+    x:18,y:851,'font-size':'8.5','fill':'rgba(232,200,122,.4)',
+    'font-family':'Cormorant Garamond, serif','font-style':'italic',
   }));
 
-  // 外枠装飾
-  svg.appendChild(el('rect',{x:2,y:2,width:516,height:816,rx:8,
-    fill:'none',stroke:'rgba(201,168,76,0.12)','stroke-width':'1'}));
+  // 外枠
+  svg.appendChild(el('rect',{x:2,y:2,width:516,height:856,rx:8,
+    fill:'none',stroke:'rgba(201,168,76,.1)','stroke-width':'1'}));
 }
 
-// ── Build side panel ──
-function buildPanel(pLon, pRx, hCusps, aspects){
+// ── Side Panel ──
+function buildPanel(pLon, pRx, hCusps){
   const panel=document.getElementById('sidePanel');
   panel.innerHTML='';
 
@@ -512,19 +387,19 @@ function buildPanel(pLon, pRx, hCusps, aspects){
   t1.textContent='✦ 惑星の位置'; sec1.appendChild(t1);
   const list=document.createElement('div'); list.className='planet-list';
 
-  const order=['saturn','uranus','neptune','jupiter','mars','sun','venus','mercury','moon','pluto'];
+  const order=['pluto','neptune','uranus','saturn','jupiter','mars','sun','venus','mercury','moon','earth'];
   order.forEach(id=>{
     const m=PLANET_META[id];
     const lon=pLon[id];
-    if(lon===undefined) return;
+    if(lon===undefined||lon===null) return;
     const{sign,deg}=lonToSign(lon);
     const house=whichHouse(lon,hCusps);
     const rx=pRx[id]||false;
     const row=document.createElement('div'); row.className='planet-row';
     row.innerHTML=`
       <span class="p-sym" style="color:${m.col}">${m.sym}</span>
-      <span class="p-name">${m.name}<br><small style="color:#5a5565;font-size:.6rem;">${m.sephira}</small></span>
-      <span class="p-pos">${SIGN_SYM[sign]} ${SIGNS[sign]}<br><small style="color:rgba(226,221,213,.5);font-size:.68rem;">${formatDeg(deg)}</small></span>
+      <span class="p-name">${m.name}<br><small style="color:#4a4555;font-size:.58rem;">${m.sephira}</small></span>
+      <span class="p-pos">${SIGN_SYM[sign]} ${SIGNS[sign]}<br><small style="color:rgba(226,221,213,.45);font-size:.66rem;">${formatDeg(deg)}</small></span>
       <span>${house?`<span class="p-house">${house}H</span>`:''} ${rx?'<span class="p-rx">℞</span>':''}</span>
     `;
     list.appendChild(row);
@@ -532,72 +407,47 @@ function buildPanel(pLon, pRx, hCusps, aspects){
   sec1.appendChild(list);
   panel.appendChild(sec1);
 
-  // アスペクト
+  // セフィラ対応表
   const sec2=document.createElement('div'); sec2.className='panel-section';
   const t2=document.createElement('div'); t2.className='panel-title';
-  t2.textContent='△ アスペクト'; sec2.appendChild(t2);
-  const alist=document.createElement('div'); alist.className='aspect-list';
-  const pName={sun:'☉太陽',moon:'☽月',mercury:'☿水星',venus:'♀金星',mars:'♂火星',
-    jupiter:'♃木星',saturn:'♄土星',uranus:'⛢天王星',neptune:'♆海王星',pluto:'♇冥王星'};
+  t2.textContent='✦ セフィラ対応'; sec2.appendChild(t2);
+  const tbl=document.createElement('div'); tbl.className='corr-table';
 
-  aspects.slice(0,18).forEach(asp=>{
-    const row=document.createElement('div'); row.className='asp-row';
-    const col=ASP_TEXT_COL[asp.asp.sym]||'#aaa';
-    row.innerHTML=`
-      <span class="asp-sym" style="color:${col}">${asp.asp.sym}</span>
-      <span class="asp-planets">${pName[asp.p1]||asp.p1} — ${pName[asp.p2]||asp.p2}</span>
-      <span class="asp-orb">${asp.asp.name} ${asp.orb.toFixed(1)}°</span>
-    `;
-    alist.appendChild(row);
-  });
-  sec2.appendChild(alist);
-  panel.appendChild(sec2);
-
-  // セフィラ対応表
-  const sec3=document.createElement('div'); sec3.className='panel-section';
-  const t3=document.createElement('div'); t3.className='panel-title';
-  t3.textContent='✦ セフィラ対応'; sec3.appendChild(t3);
-  const tbl=document.createElement('div');
-  tbl.style.cssText='font-size:.7rem;display:flex;flex-direction:column;gap:.25rem;';
   const corr=[
-    ['Keter','♄土星','王冠・宇宙意識'],
-    ["Da'at",'—','隠れた知性'],
-    ['Chokmah','⛢天王星','知恵・父性原理'],
-    ['Binah','♆海王星','理解・母性原理'],
-    ['Chesed','♃木星','慈悲・拡張'],
-    ['Gevurah','♂火星','峻厳・意志'],
-    ['Tiferet','☉太陽','美・調和・中心'],
-    ['Netzach','♀金星','勝利・感情・美'],
-    ['Hod','☿水星','荣光・知性・言葉'],
-    ['Yesod','☽月','基盤・無意識'],
-    ['Malkuth','♇冥王星','王国・物質・変容'],
+    ['Keter',    '♇冥王星', '王冠・宇宙の根源'],
+    ['Chokmah',  '♆海王星', '知恵・父性・霊感'],
+    ['Binah',    '⛢天王星', '理解・母性・形成'],
+    ["Da'at",    '♄土星',   '隠れた知・統合'],
+    ['Chesed',   '♃木星',   '慈悲・拡張・恵み'],
+    ['Gevurah',  '♂火星',   '峻厳・意志・力'],
+    ['Tiferet',  '☉太陽',   '美・調和・中心'],
+    ['Netzach',  '♀金星',   '勝利・感情・美'],
+    ['Hod',      '☿水星',   '栄光・知性・言葉'],
+    ['Yesod',    '☽月',     '基盤・無意識・鏡'],
+    ['Malkuth',  '⊕地球',   '王国・物質・現実'],
   ];
   corr.forEach(([se,pl,kw])=>{
-    const r=document.createElement('div');
-    r.style.cssText='display:grid;grid-template-columns:70px 60px 1fr;gap:.3rem;align-items:baseline;padding:.18rem 0;border-bottom:1px solid rgba(255,255,255,.04);';
-    r.innerHTML=`<span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-style:italic;">${se}</span><span style="color:rgba(226,221,213,.7);">${pl}</span><span style="color:var(--text-dim);font-size:.64rem;">${kw}</span>`;
+    const r=document.createElement('div'); r.className='corr-row';
+    r.innerHTML=`<span class="c-se">${se}</span><span class="c-pl">${pl}</span><span class="c-kw">${kw}</span>`;
     tbl.appendChild(r);
   });
-  sec3.appendChild(tbl);
-  panel.appendChild(sec3);
+  sec2.appendChild(tbl);
+  panel.appendChild(sec2);
 }
 
-// ── Main: parse URL and render ──
+// ── Main ──
 function main(){
   const params=new URLSearchParams(window.location.search);
-
-  // 惑星データがあるか確認
   if(!params.has('p_sun')&&!params.has('asc')){
     document.getElementById('noData').style.display='block';
     document.getElementById('chartLayout').style.display='none';
     return;
   }
-
   document.getElementById('noData').style.display='none';
   document.getElementById('chartLayout').style.display='grid';
   document.getElementById('dlRow').style.display='flex';
 
-  // 惑星経度
+  // 惑星経度（通常惑星）
   const pLon={}, pRx={};
   const ids=['sun','moon','mercury','venus','mars','jupiter','saturn','uranus','neptune','pluto','chiron','node'];
   ids.forEach(id=>{
@@ -607,16 +457,22 @@ function main(){
     }
   });
 
+  // 地球：太陽の対蹠点（太陽経度+180°）
+  // ホロスコープ計算機から渡されない場合はここで計算
+  if(params.has('p_earth')){
+    pLon.earth=parseFloat(params.get('p_earth'));
+    pRx.earth=false;
+  } else if(pLon.sun!==undefined){
+    pLon.earth=norm(pLon.sun+180);
+    pRx.earth=false;
+  }
+
   const ascLon=parseFloat(params.get('asc')||'0');
   const mcLon =parseFloat(params.get('mc') ||'0');
 
   // ハウスカスプ
   const hCusps={};
   for(let h=1;h<=12;h++) hCusps[h]=parseFloat(params.get(`h${h}`)||'0');
-
-  // アスペクト計算
-  const aspLons={...pLon}; delete aspLons.chiron; delete aspLons.node;
-  const aspects=findAspects(aspLons);
 
   // info bar
   const date=params.get('date')||'';
@@ -626,15 +482,16 @@ function main(){
     ${time?`<span class="info-pill">時刻 <span>${time}</span></span>`:''}
     <span class="info-pill">ASC <span>${signStr(ascLon)}</span></span>
     <span class="info-pill">MC <span>${signStr(mcLon)}</span></span>
-    <span class="info-pill">Tiferet <span>${signStr(pLon.sun||0)}</span></span>
+    <span class="info-pill">Tiferet ☉ <span>${signStr(pLon.sun||0)}</span></span>
+    <span class="info-pill">Yesod ☽ <span>${signStr(pLon.moon||0)}</span></span>
   `;
 
-  drawTree(pLon, pRx, ascLon, mcLon, hCusps, aspects);
-  buildPanel(pLon, pRx, hCusps, aspects);
+  drawTree(pLon, pRx, ascLon, mcLon, hCusps);
+  buildPanel(pLon, pRx, hCusps);
 }
 
-// SVGダウンロード
-function downloadSVG(){
+// ── Download ──
+document.getElementById('dlSvgBtn').addEventListener('click', ()=>{
   const svg=document.getElementById('treeSvg');
   const blob=new Blob([svg.outerHTML],{type:'image/svg+xml'});
   const url=URL.createObjectURL(blob);
@@ -643,7 +500,7 @@ function downloadSVG(){
   document.body.appendChild(a); a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-}
+});
 
 main();
 </script>
