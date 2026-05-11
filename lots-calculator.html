@@ -1043,11 +1043,14 @@ function renderSavedList() {
 
 function exportData() {
   const charts = getCharts();
-  const blob = new Blob([JSON.stringify(charts, null, 2)], { type: 'application/json' });
+  const json = JSON.stringify(charts, null, 2);
+  const uri = 'data:application/json;charset=utf-8,' + encodeURIComponent(json);
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  a.href = uri;
   a.download = 'arabic_lots_charts.json';
+  document.body.appendChild(a);
   a.click();
+  document.body.removeChild(a);
 }
 
 function importData(e) {
@@ -1057,17 +1060,88 @@ function importData(e) {
   reader.onload = ev => {
     try {
       const data = JSON.parse(ev.target.result);
+      if (typeof data !== 'object' || Array.isArray(data)) throw new Error();
       const charts = getCharts();
       Object.assign(charts, data);
       setCharts(charts);
       renderSavedList();
-      alert('インポートしました');
-    } catch { alert('ファイルの読み込みに失敗しました'); }
+      alert('インポートしました（' + Object.keys(data).length + '件）');
+    } catch { alert('ファイルの読み込みに失敗しました。正しいJSONファイルか確認してください。'); }
   };
   reader.readAsText(file);
+  e.target.value = '';
 }
 
 renderSavedList();
+
+// ── URLパラメータからの自動入力（ホロスコープ計算機との連携） ──
+(function loadFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  if(!params.has('time') && !params.has('sun_sign') && !params.has('sun_deg')) return;
+
+  // 受け取るパラメータの惑星ID（ロット計算機側のid）
+  const planetIds = ['sun','moon','mer','ven','mar','jup','sat','ura','nep','plu'];
+
+  let anyLoaded = false;
+
+  // 出生時刻
+  if(params.has('time')){
+    document.getElementById('birthTime').value = params.get('time');
+    updateBadge();
+    anyLoaded = true;
+  }
+
+  // 惑星
+  for(const id of planetIds){
+    const deg  = params.get(`${id}_deg`);
+    const min  = params.get(`${id}_min`);
+    const sign = params.get(`${id}_sign`);
+    if(deg !== null && sign !== null){
+      const degEl  = document.getElementById(`${id}_deg`);
+      const minEl  = document.getElementById(`${id}_min`);
+      const signEl = document.getElementById(`${id}_sign`);
+      if(degEl)  degEl.value  = deg;
+      if(minEl)  minEl.value  = min || '0';
+      if(signEl) signEl.value = sign;
+      anyLoaded = true;
+    }
+  }
+
+  // ASC
+  const ascDeg  = params.get('asc_deg');
+  const ascMin  = params.get('asc_min');
+  const ascSign = params.get('asc_sign');
+  if(ascDeg !== null && ascSign !== null){
+    const dEl = document.getElementById('asc_deg');
+    const mEl = document.getElementById('asc_min');
+    const sEl = document.getElementById('asc_sign');
+    if(dEl) dEl.value = ascDeg;
+    if(mEl) mEl.value = ascMin || '0';
+    if(sEl) sEl.value = ascSign;
+    anyLoaded = true;
+  }
+
+  // 自動入力された場合はバナーを表示して自動計算
+  if(anyLoaded){
+    // お知らせバナーを追加
+    const banner = document.createElement('div');
+    banner.style.cssText = `
+      background: rgba(74,53,128,0.25);
+      border: 1px solid rgba(123,104,174,0.45);
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      margin-bottom: 1.2rem;
+      font-size: 0.75rem;
+      color: #b090d8;
+      letter-spacing: 0.1em;
+      text-align: center;
+    `;
+    banner.textContent = '✦ ホロスコープ計算機から惑星データを受け取りました。内容を確認して「計算」を押してください。';
+    // input-sectionの前に挿入
+    const firstSection = document.querySelector('.input-section');
+    if(firstSection) firstSection.parentNode.insertBefore(banner, firstSection);
+  }
+})();
 </script>
 </body>
 </html>
