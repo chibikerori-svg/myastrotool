@@ -550,6 +550,10 @@ function buildTreeURL(pLon, pRx, ascLon, mcLon, hCusps, bdate, btime, aspects) {
   params.set('mc',  mcLon.toFixed(4));
   // ハウスカスプ
   for(let h=1;h<=12;h++) params.set(`h${h}`, (hCusps[h]||0).toFixed(4));
+  // 地球（太陽の対蹠点）
+  if(pLon.sun !== undefined){
+    params.set('p_earth', norm(pLon.sun + 180).toFixed(4));
+  }
   return `${treeFile}?${params.toString()}`;
 }
 function buildLotsURL(pLon, ascLon, btime) {
